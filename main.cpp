@@ -45,7 +45,7 @@ void onMenu(int opcion) {
             iEstiloVisualizacion = 1; // Visualización en alambre
             break;
         case SONIDO_ON:
-            PlaySound(TEXT("cocina.wav"), NULL, SND_LOOP | SND_ASYNC);
+            PlaySound(TEXT("Revolution-909.wav"), NULL, SND_LOOP | SND_ASYNC);
             break;
         case SONIDO_OFF:
             PlaySound(NULL, 0, 0); // Detiene el sonido
@@ -57,29 +57,29 @@ void onMenu(int opcion) {
 void creacionMenu(void) {
     int menuFondo, menuVisualizacion, menuSonido, menuPrincipal;
     
-    // Menú para color de fondo
+    // Menu para color de fondo
     menuFondo = glutCreateMenu(onMenu);
     glutAddMenuEntry("Gris claro", FONDO1);
     glutAddMenuEntry("Blanco", FONDO2);
     glutAddMenuEntry("Beige", FONDO3);
     
-    // Menú para estilo de visualización
+    // Menu para estilo de visualización
     menuVisualizacion = glutCreateMenu(onMenu);
-    glutAddMenuEntry("Sólido", VIS_SOLIDO);
+    glutAddMenuEntry("Solido", VIS_SOLIDO);
     glutAddMenuEntry("Alambre", VIS_ALAMBRE);
     
-    // Menú para sonido ambiente
+    // Menu para sonido ambiente
     menuSonido = glutCreateMenu(onMenu);
     glutAddMenuEntry("Sonido ON", SONIDO_ON);
     glutAddMenuEntry("Sonido OFF", SONIDO_OFF);
     
-    // Menú principal que agrupa los submenús
+    // Menu principal que agrupa los submenus
     menuPrincipal = glutCreateMenu(onMenu);
     glutAddSubMenu("Color de fondo", menuFondo);
     glutAddSubMenu("Visualización", menuVisualizacion);
     glutAddSubMenu("Sonido", menuSonido);
     
-    glutAttachMenu(GLUT_RIGHT_BUTTON); // Menú con clic derecho
+    glutAttachMenu(GLUT_RIGHT_BUTTON); // menu con clic derecho
 }
 
 // **Funcion basica para dibujar cubos (compartida)**  
@@ -345,7 +345,25 @@ void drawParedes() {
 // **FUNCIONES PRINCIPALES (RENDER Y CONFIG)**  
 // =============================================  
 void display() {  
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
+    // Colores de fondo posibles
+    float coloresFondo[3][3] = {
+        {0.8f, 0.8f, 0.8f}, // Gris claro
+        {1.0f, 1.0f, 1.0f}, // Blanco
+        {0.96f, 0.96f, 0.86f} // Beige
+    };
+    
+    glClearColor(coloresFondo[iFondo][0], 
+                coloresFondo[iFondo][1], 
+                coloresFondo[iFondo][2], 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    // Configura el estilo de visualización
+    if(iEstiloVisualizacion == 1) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Alambre
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Sólido
+    }
+    
     glMatrixMode(GL_MODELVIEW);  
     glLoadIdentity();  
 
@@ -389,6 +407,8 @@ int main(int argc, char** argv) {
     glEnable(GL_LIGHT0);  
     glEnable(GL_COLOR_MATERIAL);  
     glEnable(GL_NORMALIZE);    
+    
+    creacionMenu();
 
     // Callbacks  
     glutDisplayFunc(display);  
