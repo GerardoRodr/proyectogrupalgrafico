@@ -9,6 +9,11 @@
 
 int iFondo = 0;
 int iEstiloVisualizacion = 0; // 0=solido, 1=alambre
+float camAngleX = 20.0f;   // Inclinacion vertical inicial (grados)
+float camAngleY = 45.0f;   // Rotacion horizontal inicial (grados)
+float camDistance = 8.0f;  // Distancia de la camara al centro
+int mouseX, mouseY;        // Para almacenar posición previa del mouse
+bool mouseLeftDown = false; // Estado del botón izquierdo
 
 typedef enum {
     FONDO1, FONDO2, FONDO3,
@@ -341,6 +346,47 @@ void drawParedes() {
     }  
 }  
 
+// **MOVIMIENTO CON EL MOUSE**
+void onMouse(int button, int state, int x, int y) {
+    if (button == GLUT_LEFT_BUTTON) {
+        if (state == GLUT_DOWN) {
+            mouseLeftDown = true;
+            mouseX = x;
+            mouseY = y;
+            glutSetCursor(GLUT_CURSOR_NONE); // Oculta el cursor
+        } else {
+            mouseLeftDown = false;
+            glutSetCursor(GLUT_CURSOR_INHERIT); // Restaura el cursor
+        }
+    }
+    // Zoom con rueda del mouse
+    else if (button == 3 && state == GLUT_DOWN) { // Rueda arriba
+        camDistance -= 0.5f;
+        if (camDistance < 3.0f) camDistance = 3.0f;
+        glutPostRedisplay();
+    }
+    else if (button == 4 && state == GLUT_DOWN) { // Rueda abajo
+        camDistance += 0.5f;
+        if (camDistance > 15.0f) camDistance = 15.0f;
+        glutPostRedisplay();
+    }
+}
+
+void onMotion(int x, int y) {
+    if (mouseLeftDown) {
+        camAngleY += (x - mouseX) * 0.5f; // Sensibilidad horizontal
+        camAngleX += (y - mouseY) * 0.5f; // Sensibilidad vertical
+        
+        // Limitar angulo vertical para evitar volteretas
+        if (camAngleX > 89.0f) camAngleX = 89.0f;
+        if (camAngleX < -89.0f) camAngleX = -89.0f;
+        
+        mouseX = x;
+        mouseY = y;
+        glutPostRedisplay();
+    }
+}
+
 // =============================================  
 // **FUNCIONES PRINCIPALES (RENDER Y CONFIG)**  
 // =============================================  
@@ -357,7 +403,7 @@ void display() {
                 coloresFondo[iFondo][2], 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    // Configura el estilo de visualización
+    // Configura el estilo de visualizacion
     if(iEstiloVisualizacion == 1) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Alambre
     } else {
@@ -367,9 +413,14 @@ void display() {
     glMatrixMode(GL_MODELVIEW);  
     glLoadIdentity();  
 
+	// Calcula posicion de camara con coordenadas esféricas
+    float camX = camDistance * cos(camAngleY * M_PI/180) * cos(camAngleX * M_PI/180);
+    float camY = camDistance * sin(camAngleX * M_PI/180);
+    float camZ = camDistance * sin(camAngleY * M_PI/180) * cos(camAngleX * M_PI/180);
+
     // Vista
     gluLookAt(  
-        5.0f, 3.0f, 5.0f,  // Posicion de la cámara (vista en diagonal)
+        camX, camY, camZ,  // Posicion de la camara
         0.0f, 0.0f, -1.5f,  // Punto al que mira  
         0.0f, 1.0f, 0.0f    // Vector "arriba"  
     );  
@@ -400,7 +451,7 @@ int main(int argc, char** argv) {
     glutInitWindowSize(800, 600);  
     glutCreateWindow("Cocina 3D - Grupo 10");  
 
-    // Configuración OpenGL  
+    // Configuracion OpenGL  
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  
     glEnable(GL_DEPTH_TEST);  
     glEnable(GL_LIGHTING);  
@@ -413,6 +464,8 @@ int main(int argc, char** argv) {
     // Callbacks  
     glutDisplayFunc(display);  
     glutReshapeFunc(reshape);  
+    glutMouseFunc(onMouse);      // Para clics del mouse
+    glutMotionFunc(onMotion);    // Para movimiento con boton presionado
 
     glutMainLoop();  
     return 0;  
