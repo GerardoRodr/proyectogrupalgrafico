@@ -12,8 +12,8 @@ int iEstiloVisualizacion = 0; // 0=solido, 1=alambre
 
 float camAngleX = 20.0f;   // Inclinacion vertical inicial (grados)
 float camAngleY = 45.0f;   // Rotacion horizontal inicial (grados)
-float camDistance = 12.0f;  // Distancia aumentada para ver toda la escena
-int mouseX, mouseY;        // Para almacenar posición previa del mouse
+float camDistance = 15.0f;  // Distancia aumentada para ver toda la escena expandida
+int mouseX, mouseY;        // Para almacenar posiciï¿½n previa del mouse
 bool mouseLeftDown = false; // Estado del boton izquierdo
 
 typedef enum {
@@ -47,10 +47,10 @@ void onMenu(int opcion) {
             iFondo = 2; // Color de fondo 3
             break;
         case VIS_SOLIDO:
-            iEstiloVisualizacion = 0; // Visualización sólida
+            iEstiloVisualizacion = 0; // Visualizaciï¿½n sï¿½lida
             break;
         case VIS_ALAMBRE:
-            iEstiloVisualizacion = 1; // Visualización en alambre
+            iEstiloVisualizacion = 1; // Visualizaciï¿½n en alambre
             break;
         case SONIDO_ON:
             PlaySound(TEXT("Revolution-909.wav"), NULL, SND_LOOP | SND_ASYNC);
@@ -71,7 +71,7 @@ void creacionMenu(void) {
     glutAddMenuEntry("Blanco", FONDO2);
     glutAddMenuEntry("Beige", FONDO3);
     
-    // Menu para estilo de visualización
+    // Menu para estilo de visualizaciï¿½n
     menuVisualizacion = glutCreateMenu(onMenu);
     glutAddMenuEntry("Solido", VIS_SOLIDO);
     glutAddMenuEntry("Alambre", VIS_ALAMBRE);
@@ -84,7 +84,7 @@ void creacionMenu(void) {
     // Menu principal que agrupa los submenus
     menuPrincipal = glutCreateMenu(onMenu);
     glutAddSubMenu("Color de fondo", menuFondo);
-    glutAddSubMenu("Visualización", menuVisualizacion);
+    glutAddSubMenu("Visualizaciï¿½n", menuVisualizacion);
     glutAddSubMenu("Sonido", menuSonido);
     
     glutAttachMenu(GLUT_RIGHT_BUTTON); // menu con clic derecho
@@ -153,7 +153,7 @@ void drawCube(GLfloat width, GLfloat height, GLfloat depth, const GLfloat* color
     glPopMatrix();  
 }  
 
-// **Función para dibujar una silla individual (reutilizada y mejorada)**
+// **Funciï¿½n para dibujar una silla individual (reutilizada y mejorada)**
 void drawSilla(float posX, float posY, float posZ, const GLfloat* colorAsiento, const GLfloat* colorRespaldo) {
     glPushMatrix();
     glTranslatef(posX, posY, posZ);
@@ -182,7 +182,7 @@ void drawSilla(float posX, float posY, float posZ, const GLfloat* colorAsiento, 
     glPopMatrix();
 }
 
-// **Función para dibujar una mesa individual (reutilizada y mejorada)**
+// **Funciï¿½n para dibujar una mesa individual (reutilizada y mejorada)**
 void drawMesaIndividual(float posX, float posY, float posZ, float width, float depth, const GLfloat* colorSuperficie) {
     glPushMatrix();
     glTranslatef(posX, posY, posZ);
@@ -273,7 +273,7 @@ void drawEncimera() {
         glTranslatef(-1.8f + i * 1.2f, 0.0f, 0.65f);  
         drawCube(1.0f, 0.3f, 0.05f, COLOR_MADERA);  
 
-        // Manija del cajón  
+        // Manija del cajï¿½n  
         glTranslatef(0.0f, 0.0f, 0.05f);  
         drawCube(0.2f, 0.04f, 0.04f, COLOR_METAL);  
         glPopMatrix();  
@@ -357,13 +357,13 @@ void drawMesa() {
 // **NUEVO: COMEDOR DE RESTAURANTE**  
 // =============================================  
 void drawComedorRestaurante() {
-    // **MESAS PARA 2 PERSONAS (rectangulares pequeñas)**
+    // **MESAS PARA 2 PERSONAS (rectangulares pequeï¿½as)**
     // Fila 1 - Mesas para 2
     for(int i = 0; i < 3; i++) {
         float posX = -2.0f + i * 2.0f;
         float posZ = 2.0f;
         
-        // Mesa rectangular pequeña
+        // Mesa rectangular pequeï¿½a
         drawMesaIndividual(posX, -0.3f, posZ, 1.2f, 0.8f, COLOR_MADERA);
         
         // 2 sillas por mesa (una en cada extremo del lado corto)
@@ -384,43 +384,285 @@ void drawComedorRestaurante() {
         drawSilla(posX - 0.9f, -0.1f, posZ, COLOR_ROJO, COLOR_MADERA);     // Izquierda
         drawSilla(posX + 0.9f, -0.1f, posZ, COLOR_ROJO, COLOR_MADERA);     // Derecha
         drawSilla(posX, -0.1f, posZ - 0.9f, COLOR_ROJO, COLOR_MADERA);     // Frente
-        drawSilla(posX, -0.1f, posZ + 0.9f, COLOR_ROJO, COLOR_MADERA);     // Atrás
+        drawSilla(posX, -0.1f, posZ + 0.9f, COLOR_ROJO, COLOR_MADERA);     // Atrï¿½s
     }
     
 }
 
 // =============================================  
+// **NUEVO: ALMACEN DE COMIDA**  
+// =============================================  
+
+void drawCajaComida(float posX, float posY, float posZ, float width, float height, float depth, const GLfloat* colorPrincipal, const GLfloat* colorEtiqueta) {
+    // Caja principal
+    glPushMatrix();
+    glTranslatef(posX, posY, posZ);
+    drawCube(width, height, depth, colorPrincipal);
+    
+    // Etiqueta frontal
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, (depth/2) + 0.01f);
+    drawCube(width * 0.7f, height * 0.4f, 0.01f, colorEtiqueta);
+    glPopMatrix();
+    
+    glPopMatrix();
+}
+
+void drawBotella(float posX, float posY, float posZ, float altura, const GLfloat* colorLiquido) {
+    glPushMatrix();
+    glTranslatef(posX, posY, posZ);
+    
+    // Cuerpo de la botella
+    glColor3fv(COLOR_BLANCO);
+    glPushMatrix();
+    glTranslatef(0.0f, altura/2, 0.0f);
+    glScalef(0.1f, altura, 0.1f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+    
+    // Liquido interior
+    glColor3fv(colorLiquido);
+    glPushMatrix();
+    glTranslatef(0.0f, altura/2 - 0.05f, 0.0f);
+    glScalef(0.08f, altura - 0.1f, 0.08f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+    
+    // Tapa
+    glColor3fv(COLOR_METAL);
+    glPushMatrix();
+    glTranslatef(0.0f, altura - 0.02f, 0.0f);
+    glScalef(0.12f, 0.04f, 0.12f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+    
+    glPopMatrix();
+}
+
+void drawSaco(float posX, float posY, float posZ, const GLfloat* colorSaco) {
+    glPushMatrix();
+    glTranslatef(posX, posY, posZ);
+    
+    // Saco base (forma irregular usando esferas deformadas)
+    glColor3fv(colorSaco);
+    glPushMatrix();
+    glScalef(0.4f, 0.6f, 0.3f);
+    glutSolidSphere(0.5f, 12, 8);
+    glPopMatrix();
+    
+    // Parte superior del saco (mas estrecha)
+    glPushMatrix();
+    glTranslatef(0.0f, 0.25f, 0.0f);
+    glScalef(0.25f, 0.2f, 0.2f);
+    glutSolidSphere(0.5f, 12, 8);
+    glPopMatrix();
+    
+    glPopMatrix();
+}
+
+void drawEstanteria(float posX, float posY, float posZ) {
+    // Estructura principal de la estanteria
+    glPushMatrix();
+    glTranslatef(posX, posY, posZ);
+    
+    // Postes verticales
+    for(int i = 0; i < 3; i++) {
+        glPushMatrix();
+        glTranslatef(-0.8f + i * 0.8f, 0.0f, 0.0f);
+        drawCube(0.1f, 2.0f, 0.1f, COLOR_METAL);
+        glPopMatrix();
+    }
+    
+    // Estantes horizontales (4 niveles)
+    for(int nivel = 0; nivel < 4; nivel++) {
+        glPushMatrix();
+        glTranslatef(0.0f, -0.7f + nivel * 0.5f, 0.0f);
+        drawCube(1.6f, 0.05f, 0.6f, COLOR_METAL);
+        glPopMatrix();
+    }
+    
+    glPopMatrix();
+}
+
+void drawCongelador() {
+    glPushMatrix();
+    glTranslatef(5.5f, 0.0f, -2.0f);
+    
+    // Cuerpo principal del congelador
+    drawCube(1.2f, 1.6f, 0.8f, COLOR_BLANCO);
+    
+    // Tapa superior
+    glPushMatrix();
+    glTranslatef(0.0f, 0.85f, 0.0f);
+    drawCube(1.25f, 0.1f, 0.85f, COLOR_GRIS);
+    glPopMatrix();
+    
+    // Manija de la tapa
+    glPushMatrix();
+    glTranslatef(0.4f, 0.9f, 0.0f);
+    drawCube(0.2f, 0.05f, 0.1f, COLOR_NEGRO);
+    glPopMatrix();
+    
+    // Rejilla de ventilacion
+    for(int i = 0; i < 3; i++) {
+        glPushMatrix();
+        glTranslatef(-0.3f + i * 0.3f, -0.5f, 0.41f);
+        drawCube(0.1f, 0.3f, 0.02f, COLOR_NEGRO);
+        glPopMatrix();
+    }
+    
+    glPopMatrix();
+}
+
+void drawAlmacenComida() {
+    // **OFFSET PARA MOVER TODO EL ALMACEN**
+    float offsetX = 0.5f; // Gente cambien este valor pa mover las cosas del almacen a la derecha/izquierda
+    float offsetZ = -1.45f; // y este para atras o adelante
+    
+    // **ESTANTERIAS CON COMIDA**
+    
+    // Estanteria 1 - Izquierda
+    drawEstanteria(4.0f + offsetX, 0.3f, -1.0f + offsetZ);
+      // Productos en estanteria 1
+    // Nivel inferior - Sacos de harina y azucar
+    drawSaco(3.4f + offsetX, -0.4f, -1.0f + offsetZ, COLOR_BLANCO);     // Saco de harina
+    drawSaco(3.8f + offsetX, -0.4f, -1.2f + offsetZ, COLOR_MARRON);     // Saco de azucar morena
+    drawSaco(4.2f + offsetX, -0.4f, -0.8f + offsetZ, COLOR_BLANCO);     // Otro saco de harina
+    
+    // Nivel 2 - Cajas de cereales y productos secos
+    drawCajaComida(3.5f + offsetX, 0.1f, -1.0f + offsetZ, 0.3f, 0.4f, 0.2f, COLOR_ROJO, COLOR_BLANCO);
+    drawCajaComida(3.9f + offsetX, 0.1f, -1.1f + offsetZ, 0.25f, 0.35f, 0.15f, COLOR_AZUL, COLOR_BLANCO);
+    drawCajaComida(4.3f + offsetX, 0.1f, -0.9f + offsetZ, 0.28f, 0.38f, 0.18f, COLOR_VERDE, COLOR_BLANCO);
+    
+    // Nivel 3 - Latas y conservas
+    for(int i = 0; i < 4; i++) {
+        glPushMatrix();
+        glTranslatef(3.4f + offsetX + i * 0.25f, 0.6f, -1.0f + offsetZ + (i%2) * 0.1f);
+        glColor3fv(COLOR_METAL);
+        glutSolidCylinder(0.08f, 0.2f, 12, 8);
+        // Etiqueta de la lata
+        glColor3fv((i%2 == 0) ? COLOR_ROJO : COLOR_VERDE);
+        glTranslatef(0.0f, 0.1f, 0.08f);
+        glScalef(0.1f, 0.05f, 0.01f);
+        glutSolidCube(1.0f);
+        glPopMatrix();
+    }
+    
+    // Nivel superior - Botellas de aceites y vinagres
+    drawBotella(3.5f + offsetX, 1.1f, -1.0f + offsetZ, 0.3f, COLOR_VERDE);     // Aceite de oliva
+    drawBotella(3.8f + offsetX, 1.1f, -1.1f + offsetZ, 0.25f, COLOR_ROJO);     // Vinagre
+    drawBotella(4.1f + offsetX, 1.1f, -0.9f + offsetZ, 0.28f, COLOR_VERDE);    // Otro aceite
+    
+    // Estanteria 2 - Centro
+    drawEstanteria(5.5f + offsetX, 0.3f, -0.5f + offsetZ);
+      // Productos en estanteria 2
+    // Nivel inferior - Cajas grandes de productos
+    drawCajaComida(5.0f + offsetX, -0.4f, -0.5f + offsetZ, 0.4f, 0.5f, 0.3f, COLOR_MARRON, COLOR_BLANCO);
+    drawCajaComida(5.6f + offsetX, -0.4f, -0.3f + offsetZ, 0.35f, 0.45f, 0.25f, COLOR_AZUL, COLOR_BLANCO);
+    drawCajaComida(6.0f + offsetX, -0.4f, -0.7f + offsetZ, 0.38f, 0.48f, 0.28f, COLOR_VERDE, COLOR_BLANCO);
+    
+    // Nivel 2 - Paquetes medianos
+    for(int i = 0; i < 3; i++) {
+        drawCajaComida(5.2f + offsetX + i * 0.3f, 0.1f, -0.4f + offsetZ + i * 0.15f, 0.2f, 0.3f, 0.15f, 
+                      (i == 0) ? COLOR_ROJO : (i == 1) ? COLOR_AZUL : COLOR_VERDE, COLOR_BLANCO);
+    }
+    
+    // Nivel 3 - Mas latas
+    for(int i = 0; i < 5; i++) {
+        glPushMatrix();
+        glTranslatef(5.0f + offsetX + i * 0.2f, 0.6f, -0.5f + offsetZ + (i%3) * 0.1f);
+        glColor3fv(COLOR_METAL);
+        glutSolidCylinder(0.06f, 0.18f, 10, 6);
+        glPopMatrix();
+    }
+    
+    // **CONGELADOR** (tambien se modifica la funcion drawCongelador)
+    glPushMatrix();
+    glTranslatef(5.5f + offsetX, 0.0f, -2.0f + offsetZ);
+    
+    // Cuerpo principal del congelador
+    drawCube(1.2f, 1.6f, 0.8f, COLOR_BLANCO);
+    
+    // Tapa superior
+    glPushMatrix();
+    glTranslatef(0.0f, 0.85f, 0.0f);
+    drawCube(1.25f, 0.1f, 0.85f, COLOR_GRIS);
+    glPopMatrix();
+    
+    // Manija de la tapa
+    glPushMatrix();
+    glTranslatef(0.4f, 0.9f, 0.0f);
+    drawCube(0.2f, 0.05f, 0.1f, COLOR_NEGRO);
+    glPopMatrix();
+    
+    // Rejilla de ventilacion
+    for(int i = 0; i < 3; i++) {
+        glPushMatrix();
+        glTranslatef(-0.3f + i * 0.3f, -0.5f, 0.41f);
+        drawCube(0.1f, 0.3f, 0.02f, COLOR_NEGRO);
+        glPopMatrix();
+    }
+    
+    glPopMatrix();
+      // **CAJAS EN EL SUELO**
+    // Cajas apiladas cerca del congelador
+    drawCajaComida(6.2f + offsetX, -0.5f, -0.8f + offsetZ, 0.5f, 0.4f, 0.4f, COLOR_MARRON, COLOR_BLANCO);
+    drawCajaComida(6.2f + offsetX, -0.1f, -0.8f + offsetZ, 0.45f, 0.35f, 0.35f, COLOR_ROJO, COLOR_BLANCO);
+    
+    // Mas cajas dispersas
+    drawCajaComida(4.5f + offsetX, -0.6f, 0.5f + offsetZ, 0.4f, 0.3f, 0.3f, COLOR_AZUL, COLOR_BLANCO);
+    drawCajaComida(5.8f + offsetX, -0.6f, 0.2f + offsetZ, 0.35f, 0.35f, 0.25f, COLOR_VERDE, COLOR_BLANCO);
+    
+    // **SACOS ADICIONALES EN EL SUELO**
+    drawSaco(6.5f + offsetX, -0.5f, 0.0f + offsetZ, COLOR_BLANCO);      // Saco de arroz
+    drawSaco(6.8f + offsetX, -0.5f, -0.3f + offsetZ, COLOR_MARRON);     // Saco de frijoles
+    
+    // **BOTELLAS EN EL SUELO (como almacenamiento adicional)**
+    for(int i = 0; i < 3; i++) {
+        drawBotella(4.2f + offsetX + i * 0.2f, -0.5f, 0.8f + offsetZ, 0.4f, 
+                   (i == 0) ? COLOR_VERDE : (i == 1) ? COLOR_ROJO : COLOR_AZUL);
+    }
+}
+
+
+
+// =============================================  
 // **INTEGRADOR (GERARDO): ENTORNO, CAMARA Y ESCENA**  
 // ============================================= 
 void drawPiso() {  
-    // Piso de la cocina
+    // Piso principal de la cocina extendido hasta la pared derecha
     glPushMatrix();  
-    glTranslatef(0.0f, -0.7f, -1.5f);  
-    drawCube(8.0f, 0.1f, 5.0f, COLOR_GRIS);  
+    glTranslatef(2.25f, -0.7f, -1.5f);  // Recentrado para cubrir hasta pared derecha
+    drawCube(12.5f, 0.1f, 5.0f, COLOR_GRIS);  // Ancho aumentado para llegar a X=8.5
     glPopMatrix();  
     
-    // Piso del comedor (extendido hacia adelante)
+    // Piso del comedor extendido hasta la pared derecha
     glPushMatrix();  
-    glTranslatef(0.0f, -0.7f, 4.0f);  
-    drawCube(8.0f, 0.1f, 6.0f, COLOR_GRIS);  
+    glTranslatef(2.25f, -0.7f, 4.0f);  // Recentrado para cubrir hasta pared derecha
+    drawCube(12.5f, 0.1f, 6.0f, COLOR_GRIS);  // Ancho aumentado para llegar a X=8.5
     glPopMatrix();
-}  
+}
 
 void drawParedes() {  
-    // Pared trasera de la cocina
+    // Pared trasera de la cocina (extendida para cubrir tambien el almacen)
     glPushMatrix();  
-    glTranslatef(0.0f, 0.6f, -4.0f);  
-    drawCube(8.0f, 2.6f, 0.1f, COLOR_BLANCO);  
+    //el primer float 
+    glTranslatef(2.2f, 0.6f, -4.0f);  // Centrada para cubrir cocina + almacen
+    drawCube(12.5f, 2.6f, 0.1f, COLOR_BLANCO);  // Mas anchaW
     glPopMatrix();  
 
-    // Paredes laterales (extendidas para incluir el comedor)
-    for (int i = -1; i <= 1; i += 2) {  
-        glPushMatrix();  
-        glTranslatef(i * 4.0f, 0.6f, 1.5f);  // Extendidas y reposicionadas
-        drawCube(0.1f, 2.6f, 11.0f, COLOR_BLANCO); // Más largas  
-        glPopMatrix();  
-    }
-}  
+    // Pared lateral IZQUIERDA de la cocina (extendida para incluir el comedor)
+    glPushMatrix();  
+    glTranslatef(-4.0f, 0.6f, 1.5f);  // Solo la pared izquierda
+    drawCube(0.1f, 2.6f, 11.0f, COLOR_BLANCO); // Extendida hacia adelante
+    glPopMatrix();  
+      // Pared lateral derecha del almacen (ajustada al mismo tamaÃ±o que la izquierda)
+    glPushMatrix();
+    glTranslatef(8.5f, 0.6f, 1.5f);  // Misma posicion Z que la pared izquierda
+    drawCube(0.1f, 2.6f, 11.0f, COLOR_BLANCO);  // Misma profundidad que la pared izquierda
+    glPopMatrix();
+
+}
 
 // **MOVIMIENTO CON EL MOUSE**
 void onMouse(int button, int state, int x, int y) {
@@ -432,12 +674,12 @@ void onMouse(int button, int state, int x, int y) {
     // Zoom con rueda del mouse
     else if (button == 3 && state == GLUT_DOWN) { // Rueda arriba
         camDistance -= 0.5f;
-        if (camDistance < 5.0f) camDistance = 5.0f; // Mínimo ajustado
+        if (camDistance < 5.0f) camDistance = 5.0f; // Mï¿½nimo ajustado
         glutPostRedisplay();
     }
     else if (button == 4 && state == GLUT_DOWN) { // Rueda abajo
         camDistance += 0.5f;
-        if (camDistance > 25.0f) camDistance = 25.0f; // Máximo aumentado
+        if (camDistance > 25.0f) camDistance = 25.0f; // Mï¿½ximo aumentado
         glutPostRedisplay();
     }
 }
@@ -469,23 +711,21 @@ void display() {
     if(iEstiloVisualizacion == 1) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Alambre
     } else {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Sólido
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Sï¿½lido
     }
     
     glMatrixMode(GL_MODELVIEW);  
     glLoadIdentity();  
 
-	// Calcula posicion de camara con coordenadas esféricas
+	// Calcula posicion de camara con coordenadas esfï¿½ricas
     float camX = camDistance * cos(camAngleY * M_PI/180) * cos(camAngleX * M_PI/180);
     float camY = camDistance * sin(camAngleX * M_PI/180);
-    float camZ = camDistance * sin(camAngleY * M_PI/180) * cos(camAngleX * M_PI/180);
-
-    // Vista (punto de mira ajustado para centrar toda la escena)
+    float camZ = camDistance * sin(camAngleY * M_PI/180) * cos(camAngleX * M_PI/180);    // Vista (punto de mira ajustado para centrar toda la escena expandida)
     gluLookAt(  
         camX, camY, camZ,  // Posicion de la camara
-        0.0f, 0.0f, 1.0f,  // Punto al que mira (más hacia adelante)
+        2.25f, 0.0f, 0.5f,  // Punto al que mira (centrado en la escena completa)
         0.0f, 1.0f, 0.0f    // Vector "arriba"  
-    );  
+    );
 
     // Dibujar elementos de la cocina
     drawParedes();  
@@ -499,13 +739,16 @@ void display() {
     
     // Dibujar el nuevo comedor de restaurante
     drawComedorRestaurante();
+
+    // Dibujar el nuevo almacen de comida
+    drawAlmacenComida();
     
     glutSwapBuffers();  
 }  
 
 void reshape(int width, int height) {
-    glViewport(0, 0, width, height);  // Ajusta el viewport al nuevo tamaño
-    glMatrixMode(GL_PROJECTION);  // Selecciona la matriz de proyección
+    glViewport(0, 0, width, height);  // Ajusta el viewport al nuevo tamaï¿½o
+    glMatrixMode(GL_PROJECTION);  // Selecciona la matriz de proyecciï¿½n
     glLoadIdentity();  // Reinicia la matriz
     gluPerspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);  // Proyeccion en perspectiva
     glMatrixMode(GL_MODELVIEW);  // Vuelve a la matriz de modelo-vista
@@ -514,7 +757,7 @@ void reshape(int width, int height) {
 int main(int argc, char** argv) {  
     glutInit(&argc, argv);  
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);  
-    glutInitWindowSize(1024, 768);  // Ventana más grande para ver mejor la escena expandida
+    glutInitWindowSize(1024, 768);  // Ventana mï¿½s grande para ver mejor la escena expandida
     glutCreateWindow("Cocina 3D con Comedor de Restaurante - Grupo 10");  
 
     // Configuracion OpenGL  
