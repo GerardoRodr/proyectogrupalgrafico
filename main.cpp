@@ -72,19 +72,19 @@ void configurarIluminacion() {
 // **CONFIGURACION DE CAMARA PREESTABLECIDA**
 void configurarCamara() {
     if (iTipoCamara == 1) { // Vista de cocina
-        camAngleX = 15.0f;
-        camAngleY = 30.0f;
-        camDistance = 12.0f;
+        camAngleX = 10.0f;
+        camAngleY = 80.0f;
+        camDistance = 4.0f;
     }
     else if (iTipoCamara == 2) { // Vista de comedor
         camAngleX = 20.0f;
-        camAngleY = 180.0f;
+        camAngleY = 90.0f;
         camDistance = 14.0f;
     }
     else if (iTipoCamara == 3) { // Vista de almacen
-        camAngleX = 25.0f;
-        camAngleY = 300.0f;
-        camDistance = 10.0f;
+        camAngleX = 20.0f;
+        camAngleY = 150.0f;
+        camDistance = 4.0f;
     }
     // iTipoCamara == 0 es camara libre, no se modifica
 }
@@ -510,8 +510,8 @@ void drawComedorRestaurante() {
         // Mesa rectangular peque�a
         drawMesaIndividual(posX, -0.3f, posZ, 1.2f, 0.8f, COLOR_MADERA);
           // 2 sillas por mesa cara a cara
-        drawSilla(posX, -0.1f, posZ - 0.8f, COLOR_AZUL, COLOR_MADERA, 0.0f);   // Silla frontal (normal)
-        drawSilla(posX, -0.1f, posZ + 0.8f, COLOR_AZUL, COLOR_MADERA, 180.0f); // Silla trasera (volteada)
+        drawSilla(posX, -0.5f, posZ - 0.8f, COLOR_AZUL, COLOR_MADERA, 0.0f);   // Silla frontal (normal)
+        drawSilla(posX, -0.5f, posZ + 0.8f, COLOR_AZUL, COLOR_MADERA, 180.0f); // Silla trasera (volteada)
     }
     
     // **MESAS PARA 4 PERSONAS (cuadradas)**
@@ -523,10 +523,10 @@ void drawComedorRestaurante() {
         // Mesa cuadrada
         drawMesaIndividual(posX, -0.3f, posZ, 1.4f, 1.4f, COLOR_MADERA);
           // 4 sillas alrededor de la mesa cara a cara
-        drawSilla(posX - 0.9f, -0.1f, posZ, COLOR_ROJO, COLOR_MADERA, 90.0f);   // Izquierda (mirando hacia la mesa)
-        drawSilla(posX + 0.9f, -0.1f, posZ, COLOR_ROJO, COLOR_MADERA, 270.0f);  // Derecha (mirando hacia la mesa)
-        drawSilla(posX, -0.1f, posZ - 0.9f, COLOR_ROJO, COLOR_MADERA, 0.0f);    // Frente (normal)
-        drawSilla(posX, -0.1f, posZ + 0.9f, COLOR_ROJO, COLOR_MADERA, 180.0f);  // Atras (volteada)
+        drawSilla(posX - 0.9f, -0.5f, posZ, COLOR_ROJO, COLOR_MADERA, 90.0f);   // Izquierda (mirando hacia la mesa)
+        drawSilla(posX + 0.9f, -0.5f, posZ, COLOR_ROJO, COLOR_MADERA, 270.0f);  // Derecha (mirando hacia la mesa)
+        drawSilla(posX, -0.5f, posZ - 0.9f, COLOR_ROJO, COLOR_MADERA, 0.0f);    // Frente (normal)
+        drawSilla(posX, -0.5f, posZ + 0.9f, COLOR_ROJO, COLOR_MADERA, 180.0f);  // Atras (volteada)
     }
     
 }
