@@ -9,6 +9,11 @@
 
 int iFondo = 0;
 int iEstiloVisualizacion = 0; // 0=solido, 1=alambre
+int iTipoLuz = 0; // 0=dia, 1=noche, 2=ambiente
+int iSeccionVisible = 3; // 0=cocina, 1=comedor, 2=almacen, 3=todo
+int iTipoCamara = 0; // 0=libre, 1=cocina, 2=comedor, 3=almacen
+bool bAnimacionActiva = false;
+float fTiempoAnimacion = 0.0f;
 
 float camAngleX = 20.0f;   // Inclinacion vertical inicial (grados)
 float camAngleY = 45.0f;   // Rotacion horizontal inicial (grados)
@@ -19,7 +24,11 @@ bool mouseLeftDown = false; // Estado del boton izquierdo
 typedef enum {
     FONDO1, FONDO2, FONDO3,
     VIS_SOLIDO, VIS_ALAMBRE,
-    SONIDO_ON, SONIDO_OFF
+    SONIDO_ON, SONIDO_OFF,
+    LUZ_DIA, LUZ_NOCHE, LUZ_AMBIENTE,
+    MOSTRAR_COCINA, MOSTRAR_COMEDOR, MOSTRAR_ALMACEN, MOSTRAR_TODO,
+    CAMARA_LIBRE, CAMARA_COCINA, CAMARA_COMEDOR, CAMARA_ALMACEN,
+    RESET_VISTA, ANIMACION_ON, ANIMACION_OFF
 } opcionesMenu;
 
 // **Paleta de colores**
@@ -33,6 +42,62 @@ const GLfloat COLOR_AZUL[] = {0.0f, 0.4f, 0.8f};
 const GLfloat COLOR_ROJO[] = {0.8f, 0.1f, 0.1f};
 const GLfloat COLOR_VERDE[] = {0.2f, 0.6f, 0.2f};
 const GLfloat COLOR_MARRON[] = {0.4f, 0.2f, 0.1f};
+
+// **CONFIGURACION DE ILUMINACION**
+void configurarIluminacion() {
+    // Posicion de la luz
+    GLfloat lightPos[] = {5.0f, 8.0f, 5.0f, 1.0f};
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    
+    if (iTipoLuz == 0) { // Luz de dia
+        GLfloat lightColor[] = {1.0f, 1.0f, 0.9f, 1.0f}; // Blanco calido
+        GLfloat ambientLight[] = {0.4f, 0.4f, 0.4f, 1.0f}; // Ambiente claro
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
+        glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+    }
+    else if (iTipoLuz == 1) { // Luz de noche
+        GLfloat lightColor[] = {0.7f, 0.7f, 1.0f, 1.0f}; // Azul frio
+        GLfloat ambientLight[] = {0.1f, 0.1f, 0.2f, 1.0f}; // Ambiente oscuro
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
+        glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+    }
+    else { // Luz ambiente suave
+        GLfloat lightColor[] = {1.0f, 0.8f, 0.6f, 1.0f}; // Amarillo suave
+        GLfloat ambientLight[] = {0.6f, 0.5f, 0.4f, 1.0f}; // Ambiente calido
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
+        glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+    }
+}
+
+// **CONFIGURACION DE CAMARA PREESTABLECIDA**
+void configurarCamara() {
+    if (iTipoCamara == 1) { // Vista de cocina
+        camAngleX = 15.0f;
+        camAngleY = 30.0f;
+        camDistance = 12.0f;
+    }
+    else if (iTipoCamara == 2) { // Vista de comedor
+        camAngleX = 20.0f;
+        camAngleY = 180.0f;
+        camDistance = 14.0f;
+    }
+    else if (iTipoCamara == 3) { // Vista de almacen
+        camAngleX = 25.0f;
+        camAngleY = 300.0f;
+        camDistance = 10.0f;
+    }
+    // iTipoCamara == 0 es camara libre, no se modifica
+}
+
+// **ANIMACION SIMPLE**
+void actualizarAnimacion() {
+    if (bAnimacionActiva) {
+        fTiempoAnimacion += 0.05f;
+        if (fTiempoAnimacion > 360.0f) {
+            fTiempoAnimacion = 0.0f;
+        }
+    }
+}
 
 // **MENU**
 void onMenu(int opcion) {
@@ -58,12 +123,62 @@ void onMenu(int opcion) {
         case SONIDO_OFF:
             PlaySound(NULL, 0, 0); // Detiene el sonido
             break;
+        case LUZ_DIA:
+            iTipoLuz = 0;
+            break;
+        case LUZ_NOCHE:
+            iTipoLuz = 1;
+            break;
+        case LUZ_AMBIENTE:
+            iTipoLuz = 2;
+            break;
+        case MOSTRAR_COCINA:
+            iSeccionVisible = 0;
+            break;
+        case MOSTRAR_COMEDOR:
+            iSeccionVisible = 1;
+            break;
+        case MOSTRAR_ALMACEN:
+            iSeccionVisible = 2;
+            break;
+        case MOSTRAR_TODO:
+            iSeccionVisible = 3;
+            break;
+        case CAMARA_LIBRE:
+            iTipoCamara = 0;
+            break;
+        case CAMARA_COCINA:
+            iTipoCamara = 1;
+            configurarCamara();
+            break;
+        case CAMARA_COMEDOR:
+            iTipoCamara = 2;
+            configurarCamara();
+            break;
+        case CAMARA_ALMACEN:
+            iTipoCamara = 3;
+            configurarCamara();
+            break;
+        case RESET_VISTA:
+            camAngleX = 20.0f;
+            camAngleY = 45.0f;
+            camDistance = 15.0f;
+            iTipoCamara = 0;
+            break;
+        case ANIMACION_ON:
+            bAnimacionActiva = true;
+            break;
+        case ANIMACION_OFF:
+            bAnimacionActiva = false;
+            fTiempoAnimacion = 0.0f;
+            break;
     }
     glutPostRedisplay();
 }
 
 void creacionMenu(void) {
-    int menuFondo, menuVisualizacion, menuSonido, menuPrincipal;
+    int menuFondo, menuVisualizacion, menuSonido, menuIluminacion;
+    int menuSecciones, menuCamara, menuControl, menuPrincipal;
     
     // Menu para color de fondo
     menuFondo = glutCreateMenu(onMenu);
@@ -71,7 +186,7 @@ void creacionMenu(void) {
     glutAddMenuEntry("Blanco", FONDO2);
     glutAddMenuEntry("Beige", FONDO3);
     
-    // Menu para estilo de visualizaci�n
+    // Menu para estilo de visualizacion
     menuVisualizacion = glutCreateMenu(onMenu);
     glutAddMenuEntry("Solido", VIS_SOLIDO);
     glutAddMenuEntry("Alambre", VIS_ALAMBRE);
@@ -81,11 +196,41 @@ void creacionMenu(void) {
     glutAddMenuEntry("Sonido ON", SONIDO_ON);
     glutAddMenuEntry("Sonido OFF", SONIDO_OFF);
     
+    // Menu para iluminacion
+    menuIluminacion = glutCreateMenu(onMenu);
+    glutAddMenuEntry("Luz de dia", LUZ_DIA);
+    glutAddMenuEntry("Luz de noche", LUZ_NOCHE);
+    glutAddMenuEntry("Luz ambiente", LUZ_AMBIENTE);
+    
+    // Menu para mostrar secciones
+    menuSecciones = glutCreateMenu(onMenu);
+    glutAddMenuEntry("Solo cocina", MOSTRAR_COCINA);
+    glutAddMenuEntry("Solo comedor", MOSTRAR_COMEDOR);
+    glutAddMenuEntry("Solo almacen", MOSTRAR_ALMACEN);
+    glutAddMenuEntry("Mostrar todo", MOSTRAR_TODO);
+    
+    // Menu para vistas de camara
+    menuCamara = glutCreateMenu(onMenu);
+    glutAddMenuEntry("Camara libre", CAMARA_LIBRE);
+    glutAddMenuEntry("Vista cocina", CAMARA_COCINA);
+    glutAddMenuEntry("Vista comedor", CAMARA_COMEDOR);
+    glutAddMenuEntry("Vista almacen", CAMARA_ALMACEN);
+    
+    // Menu para controles generales
+    menuControl = glutCreateMenu(onMenu);
+    glutAddMenuEntry("Resetear vista", RESET_VISTA);
+    glutAddMenuEntry("Animacion ON", ANIMACION_ON);
+    glutAddMenuEntry("Animacion OFF", ANIMACION_OFF);
+    
     // Menu principal que agrupa los submenus
     menuPrincipal = glutCreateMenu(onMenu);
     glutAddSubMenu("Color de fondo", menuFondo);
     glutAddSubMenu("Visualizacion", menuVisualizacion);
     glutAddSubMenu("Sonido", menuSonido);
+    glutAddSubMenu("Iluminacion", menuIluminacion);
+    glutAddSubMenu("Mostrar secciones", menuSecciones);
+    glutAddSubMenu("Vistas de camara", menuCamara);
+    glutAddSubMenu("Controles", menuControl);
     
     glutAttachMenu(GLUT_RIGHT_BUTTON); // menu con clic derecho
 }
@@ -727,51 +872,124 @@ void display() {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Solido
     }
     
+    // Configurar iluminacion segun el tipo seleccionado
+    configurarIluminacion();
+    
+    // Actualizar animacion si esta activa
+    actualizarAnimacion();
+    
     glMatrixMode(GL_MODELVIEW);  
     glLoadIdentity();  
 
-	// Calcula posicion de camara con coordenadas esfericas
+    // Calcula posicion de camara con coordenadas esfericas
     float camX = camDistance * cos(camAngleY * M_PI/180) * cos(camAngleX * M_PI/180);
     float camY = camDistance * sin(camAngleX * M_PI/180);
-    float camZ = camDistance * sin(camAngleY * M_PI/180) * cos(camAngleX * M_PI/180);    // Vista (punto de mira ajustado para centrar toda la escena expandida)
+    float camZ = camDistance * sin(camAngleY * M_PI/180) * cos(camAngleX * M_PI/180);
+    
+    // Vista (punto de mira ajustado para centrar toda la escena expandida)
     gluLookAt(  
         camX, camY, camZ,  // Posicion de la camara
         2.25f, 0.0f, 0.5f,  // Punto al que mira (centrado en la escena completa)
         0.0f, 1.0f, 0.0f    // Vector "arriba"  
     );
 
-    // Dibujar elementos de la cocina
-    drawParedes();  
-    drawPiso();  
-    drawGabinetesSuperiores();  
-    drawEncimera();  
-    drawRefrigerador();  
-    drawEstufa();  
-    drawMesa(); // Mesa original de la cocina
-    drawFregadero();  
-    
-    // Dibujar el nuevo comedor de restaurante
-    drawComedorRestaurante();
+    // Aplicar rotacion de animacion si esta activa
+    if (bAnimacionActiva) {
+        glRotatef(fTiempoAnimacion, 0.0f, 1.0f, 0.0f);
+    }
 
-    // Dibujar el nuevo almacen de comida
-    drawAlmacenComida();
+    // Dibujar elementos segun la seccion visible
+    if (iSeccionVisible == 0 || iSeccionVisible == 3) { // Cocina o todo
+        drawParedes();  
+        drawPiso();  
+        drawGabinetesSuperiores();  
+        drawEncimera();  
+        drawRefrigerador();  
+        drawEstufa();  
+        drawMesa(); // Mesa original de la cocina
+        drawFregadero();  
+    }
+    
+    if (iSeccionVisible == 1 || iSeccionVisible == 3) { // Comedor o todo
+        if (iSeccionVisible == 1) { // Solo comedor, dibujar piso basico
+            glPushMatrix();  
+            glTranslatef(2.25f, -0.7f, 4.0f);
+            drawCube(12.5f, 0.1f, 6.0f, COLOR_GRIS);
+            glPopMatrix();
+        }
+        drawComedorRestaurante();
+    }
+    
+    if (iSeccionVisible == 2 || iSeccionVisible == 3) { // Almacen o todo
+        if (iSeccionVisible == 2) { // Solo almacen, dibujar piso basico
+            glPushMatrix();  
+            glTranslatef(6.0f, -0.7f, -1.5f);
+            drawCube(5.0f, 0.1f, 5.0f, COLOR_GRIS);
+            glPopMatrix();
+        }
+        drawAlmacenComida();
+    }
     
     glutSwapBuffers();  
-}  
+}
 
 void reshape(int width, int height) {
-    glViewport(0, 0, width, height);  // Ajusta el viewport al nuevo tama�o
-    glMatrixMode(GL_PROJECTION);  // Selecciona la matriz de proyecci�n
+    glViewport(0, 0, width, height);  // Ajusta el viewport al nuevo tamano
+    glMatrixMode(GL_PROJECTION);  // Selecciona la matriz de proyeccion
     glLoadIdentity();  // Reinicia la matriz
     gluPerspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);  // Proyeccion en perspectiva
     glMatrixMode(GL_MODELVIEW);  // Vuelve a la matriz de modelo-vista
-}  
+}
+
+// **FUNCION IDLE PARA ANIMACION**
+void idle() {
+    if (bAnimacionActiva) {
+        glutPostRedisplay(); // Solo redibuja si la animacion esta activa
+    }
+}
+
+// **FUNCION PARA MANEJAR TECLAS (OPCIONAL)**
+void onKeyboard(unsigned char key, int x, int y) {
+    switch(key) {
+        case 27: // ESC para salir
+            exit(0);
+            break;
+        case 'r': case 'R': // Reset vista
+            camAngleX = 20.0f;
+            camAngleY = 45.0f;
+            camDistance = 15.0f;
+            iTipoCamara = 0;
+            glutPostRedisplay();
+            break;
+        case 'a': case 'A': // Toggle animacion
+            bAnimacionActiva = !bAnimacionActiva;
+            if (!bAnimacionActiva) fTiempoAnimacion = 0.0f;
+            break;
+        case '1': // Vista cocina
+            iTipoCamara = 1;
+            configurarCamara();
+            glutPostRedisplay();
+            break;
+        case '2': // Vista comedor
+            iTipoCamara = 2;
+            configurarCamara();
+            glutPostRedisplay();
+            break;
+        case '3': // Vista almacen
+            iTipoCamara = 3;
+            configurarCamara();
+            glutPostRedisplay();
+            break;
+    }
+}
 
 int main(int argc, char** argv) {  
     glutInit(&argc, argv);  
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);  
-    glutInitWindowSize(1024, 768);  // Ventana m�s grande para ver mejor la escena expandida
-    glutCreateWindow("Cocina 3D con Comedor de Restaurante - Grupo 10");      // Configuracion OpenGL  
+    glutInitWindowSize(1024, 768);  // Ventana mas grande para ver mejor la escena expandida
+    glutCreateWindow("Cocina 3D Interactiva con Menu Expandido - Grupo 10");
+    
+    // Configuracion OpenGL  
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  
     glEnable(GL_DEPTH_TEST);  
     glEnable(GL_LIGHTING);  
@@ -784,6 +1002,9 @@ int main(int argc, char** argv) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_BLEND);  // Deshabilitado por defecto, se activa solo cuando se necesita
     
+    // Configuracion inicial de iluminacion
+    configurarIluminacion();
+    
     creacionMenu();
 
     // Callbacks  
@@ -791,6 +1012,8 @@ int main(int argc, char** argv) {
     glutReshapeFunc(reshape);  
     glutMouseFunc(onMouse);      // Para clics del mouse
     glutMotionFunc(onMotion);    // Para movimiento con boton presionado
+    glutIdleFunc(idle);          // Para animacion continua
+    glutKeyboardFunc(onKeyboard); // Para control por teclado
 
     glutMainLoop();  
     return 0;  
