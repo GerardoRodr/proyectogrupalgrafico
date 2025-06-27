@@ -2,13 +2,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "g++.exe - Build and debug active file",
+            "name": "Debug ProyectoGrupal",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-            "args": [],
+            "program": "${workspaceFolder}/build/ProyectoGrupal.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "-I${workspaceFolder}/include",
+                "-I${workspaceFolder}/src",
+                "${workspaceFolder}/src/**/*.cpp",
+                "-o",
+                "${workspaceFolder}/build/ProyectoGrupal.exe",
+                "-lopengl32",
+                "-lfreeglut",
+                "-lglu32",
+                "-lwinmm"
+            ],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -20,7 +32,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "C/C++: g++.exe build active file"
+            "preLaunchTask": "Compilar ProyectoGrupal"
         }
     ]
 }
