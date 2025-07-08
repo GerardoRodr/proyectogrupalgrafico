@@ -6,5 +6,6 @@
 // Funciones del entorno
 void drawPiso();
 void drawParedes();
+void drawGrassExterior();
 
 #endif

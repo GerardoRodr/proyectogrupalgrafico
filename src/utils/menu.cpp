@@ -8,7 +8,7 @@
 // Variables globales del menu
 int iFondo = 0;
 int iEstiloVisualizacion = 0; // 0=solido, 1=alambre
-int iSeccionVisible = 3; // 0=cocina, 1=comedor, 2=almacen, 3=todo
+int iSeccionVisible = 2; // 0=primer piso, 1=segundo piso, 2=todo
 bool bAnimacionActiva = false;
 float fTiempoAnimacion = 0.0f;
 
@@ -58,17 +58,14 @@ void onMenu(int opcion) {
         case LUZ_AMBIENTE:
             iTipoLuz = 2;
             break;
-        case MOSTRAR_COCINA:
+        case MOSTRAR_PRIMER_PISO:
             iSeccionVisible = 0;
             break;
-        case MOSTRAR_COMEDOR:
+        case MOSTRAR_SEGUNDO_PISO:
             iSeccionVisible = 1;
             break;
-        case MOSTRAR_ALMACEN:
-            iSeccionVisible = 2;
-            break;
         case MOSTRAR_TODO:
-            iSeccionVisible = 3;
+            iSeccionVisible = 2;
             break;
         case CAMARA_LIBRE:
             // Activar modo FPS (camara libre)
@@ -151,9 +148,8 @@ void creacionMenu(void) {
     
     // Menu para mostrar secciones
     menuSecciones = glutCreateMenu(onMenu);
-    glutAddMenuEntry("Solo cocina", MOSTRAR_COCINA);
-    glutAddMenuEntry("Solo comedor", MOSTRAR_COMEDOR);
-    glutAddMenuEntry("Solo almacen", MOSTRAR_ALMACEN);
+    glutAddMenuEntry("Primer piso", MOSTRAR_PRIMER_PISO);
+    glutAddMenuEntry("Segundo piso", MOSTRAR_SEGUNDO_PISO);
     glutAddMenuEntry("Mostrar todo", MOSTRAR_TODO);
     
     // Menu para vistas de camara

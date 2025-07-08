@@ -31,8 +31,7 @@ ProyectoGrupal/
 │       └── environment.h
 ├── assets/                  # Recursos del proyecto
 │   └── Revolution-909.wav   # Archivo de audio
-├── build/                   # Archivos compilados
-├── Makefile                 # Script de compilación
+├── build/                   # El programa compilado
 └── README.md               # Este archivo
 ```
 

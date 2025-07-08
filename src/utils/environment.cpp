@@ -34,3 +34,17 @@ void drawParedes() {
     drawCube(0.1f, 2.6f, 11.0f, COLOR_BLANCO);  // Misma profundidad que la pared izquierda
     glPopMatrix();
 }
+
+void drawGrassExterior() {
+    // Dibujar el pasto exterior
+    glPushMatrix();
+    glTranslatef(0.0f, -0.7f, 0.0f);  // Posicionar en el suelo
+    glColor3f(0.1f, 0.8f, 0.1f);  // Color verde pasto
+    glBegin(GL_QUADS);
+        glVertex3f(-10.0f, 0.0f, -10.0f);
+        glVertex3f(10.0f, 0.0f, -10.0f);
+        glVertex3f(10.0f, 0.0f, 10.0f);
+        glVertex3f(-10.0f, 0.0f, 10.0f);
+    glEnd();
+    glPopMatrix();
+}

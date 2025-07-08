@@ -17,7 +17,7 @@ void display() {
         {0.8f, 0.8f, 0.8f}, // Gris claro
         {1.0f, 1.0f, 1.0f}, // Blanco
         {0.96f, 0.96f, 0.86f}, // Beige
-        {0.53f, 0.81f, 0.98f} // Celeste cielo (sky blue)
+        {0.53f, 0.81f, 0.98f} // Celeste cielo
     };
     
     glClearColor(coloresFondo[iFondo][0], 
@@ -50,32 +50,21 @@ void display() {
     }
 
     // Dibujar elementos segun la seccion visible
-    if (iSeccionVisible == 0 || iSeccionVisible == 3) { // Cocina o todo
+    if (iSeccionVisible == 0 || iSeccionVisible == 2) { // Primer piso o todo
         drawParedes();  
         drawPiso();  
         drawKitchen();
+        drawDining();
+        drawStorage();
+    }
+    
+    if (iSeccionVisible == 1 || iSeccionVisible == 2) { // Segundo piso o todo
         // Dibujar segundo piso de la cocina
         drawSecondFloorKitchen();
     }
     
-    if (iSeccionVisible == 1 || iSeccionVisible == 3) { // Comedor o todo
-        if (iSeccionVisible == 1) { // Solo comedor, dibujar piso basico
-            glPushMatrix();  
-            glTranslatef(2.25f, -0.7f, 4.0f);
-            drawCube(12.5f, 0.1f, 6.0f, COLOR_GRIS);
-            glPopMatrix();
-        }
-        drawDining();
-    }
-    
-    if (iSeccionVisible == 2 || iSeccionVisible == 3) { // Almacen o todo
-        if (iSeccionVisible == 2) { // Solo almacen, dibujar piso basico
-            glPushMatrix();  
-            glTranslatef(6.0f, -0.7f, -1.5f);
-            drawCube(5.0f, 0.1f, 5.0f, COLOR_GRIS);
-            glPopMatrix();
-        }
-        drawStorage();
+    if (iSeccionVisible == 2) { // Solo cuando se muestra todo
+        drawGrassExterior();
     }
     
     glutSwapBuffers();  
