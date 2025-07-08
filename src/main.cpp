@@ -13,10 +13,11 @@
 // **FUNCIONES PRINCIPALES (RENDER Y CONFIG)**  
 void display() {  
     // Colores de fondo posibles
-    float coloresFondo[3][3] = {
+    float coloresFondo[4][3] = {
         {0.8f, 0.8f, 0.8f}, // Gris claro
         {1.0f, 1.0f, 1.0f}, // Blanco
-        {0.96f, 0.96f, 0.86f} // Beige
+        {0.96f, 0.96f, 0.86f}, // Beige
+        {0.53f, 0.81f, 0.98f} // Celeste cielo (sky blue)
     };
     
     glClearColor(coloresFondo[iFondo][0], 
@@ -40,20 +41,11 @@ void display() {
     glMatrixMode(GL_MODELVIEW);  
     glLoadIdentity();  
 
-    // Calcula posicion de camara con coordenadas esfericas
-    float camX = camDistance * cos(camAngleY * M_PI/180) * cos(camAngleX * M_PI/180);
-    float camY = camDistance * sin(camAngleX * M_PI/180);
-    float camZ = camDistance * sin(camAngleY * M_PI/180) * cos(camAngleX * M_PI/180);
-    
-    // Vista (punto de mira ajustado para centrar toda la escena expandida)
-    gluLookAt(  
-        camX, camY, camZ,  // Posicion de la camara
-        2.25f, 0.0f, 0.5f,  // Punto al que mira (centrado en la escena completa)
-        0.0f, 1.0f, 0.0f    // Vector "arriba"  
-    );
+    // Aplicar configuracion de camara (FPS o orbital)
+    applyCamera();
 
-    // Aplicar rotacion de animacion si esta activa
-    if (bAnimacionActiva) {
+    // Aplicar rotacion de animacion si esta activa (solo en modo orbital)
+    if (bAnimacionActiva && !bCamaraFPS) {
         glRotatef(fTiempoAnimacion, 0.0f, 1.0f, 0.0f);
     }
 
@@ -99,44 +91,78 @@ void reshape(int width, int height) {
 
 // **FUNCION IDLE PARA ANIMACION**
 void idle() {
+    // **ACTUALIZAR CAMARA FPS CONSTANTEMENTE**
+    updateFPSCamera();
+    
     if (bAnimacionActiva) {
         glutPostRedisplay(); // Solo redibuja si la animacion esta activa
     }
 }
 
-// **FUNCION PARA MANEJAR TECLAS (OPCIONAL)**
+// **FUNCION PARA MANEJAR TECLAS**
 void onKeyboard(unsigned char key, int x, int y) {
+    // Primero llamar la funcion de camara para manejar WASD y cambio de modo
+    cameraOnKeyboard(key, x, y);
+    
     switch(key) {
         case 27: // ESC para salir
             exit(0);
             break;
         case 'r': case 'R': // Reset vista
-            camAngleX = 20.0f;
-            camAngleY = 45.0f;
-            camDistance = 15.0f;
-            iTipoCamara = 0;
+            if (bCamaraFPS) {
+                // Reset FPS
+                fpsX = 0.0f;
+                fpsY = 2.0f;
+                fpsZ = 5.0f;
+                fpsPitch = 0.0f;
+                fpsYaw = 0.0f;
+            } else {
+                // Reset orbital
+                camAngleX = 20.0f;
+                camAngleY = 45.0f;
+                camDistance = 15.0f;
+                iTipoCamara = 0;
+            }
             glutPostRedisplay();
             break;
-        case 'a': case 'A': // Toggle animacion
-            bAnimacionActiva = !bAnimacionActiva;
-            if (!bAnimacionActiva) fTiempoAnimacion = 0.0f;
-            break;
-        case '1': // Vista cocina
-            iTipoCamara = 1;
-            configurarCamara();
+        case 'f': case 'F': // Toggle FPS mode (alternativa a 'C')
+            bCamaraFPS = !bCamaraFPS;
+            if (bCamaraFPS) {
+                fpsX = 0.0f;
+                fpsY = 2.0f;
+                fpsZ = 5.0f;
+                fpsPitch = 0.0f;
+                fpsYaw = 0.0f;
+            }
             glutPostRedisplay();
             break;
-        case '2': // Vista comedor
-            iTipoCamara = 2;
-            configurarCamara();
-            glutPostRedisplay();
+        case '1': // Vista cocina (solo en modo orbital)
+            if (!bCamaraFPS) {
+                iTipoCamara = 1;
+                configurarCamara();
+                glutPostRedisplay();
+            }
             break;
-        case '3': // Vista almacen
-            iTipoCamara = 3;
-            configurarCamara();
-            glutPostRedisplay();
+        case '2': // Vista comedor (solo en modo orbital)
+            if (!bCamaraFPS) {
+                iTipoCamara = 2;
+                configurarCamara();
+                glutPostRedisplay();
+            }
+            break;
+        case '3': // Vista almacen (solo en modo orbital)
+            if (!bCamaraFPS) {
+                iTipoCamara = 3;
+                configurarCamara();
+                glutPostRedisplay();
+            }
             break;
     }
+}
+
+// **FUNCION PARA MANEJAR LIBERACION DE TECLAS**
+void onKeyboardUp(unsigned char key, int x, int y) {
+    cameraOnKeyboardUp(key, x, y);
 }
 
 int main(int argc, char** argv) {  
@@ -166,10 +192,11 @@ int main(int argc, char** argv) {
     // Callbacks  
     glutDisplayFunc(display);  
     glutReshapeFunc(reshape);  
-    glutMouseFunc(onMouse);      // Para clics del mouse
-    glutMotionFunc(onMotion);    // Para movimiento con boton presionado
+    glutMouseFunc(cameraOnMouse);      // Para clics del mouse
+    glutMotionFunc(cameraOnMotion);    // Para movimiento con boton presionado
     glutIdleFunc(idle);          // Para animacion continua
     glutKeyboardFunc(onKeyboard); // Para control por teclado
+    glutKeyboardUpFunc(onKeyboardUp); // Para liberacion de teclas (necesario para WASD)
 
     glutMainLoop();  
     return 0;  

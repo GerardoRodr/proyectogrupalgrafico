@@ -34,6 +34,9 @@ void onMenu(int opcion) {
         case FONDO3:
             iFondo = 2; // Color de fondo 3
             break;
+        case FONDO4:
+            iFondo = 3; // Color de fondo 4 (celeste cielo)
+            break;
         case VIS_SOLIDO:
             iEstiloVisualizacion = 0; // Visualizacion solida
             break;
@@ -68,25 +71,45 @@ void onMenu(int opcion) {
             iSeccionVisible = 3;
             break;
         case CAMARA_LIBRE:
-            iTipoCamara = 0;
+            // Activar modo FPS (camara libre)
+            bCamaraFPS = true;
+            // Posicionar camara en una buena ubicacion inicial
+            fpsX = 0.0f;
+            fpsY = 2.0f;
+            fpsZ = 5.0f;
+            fpsPitch = 0.0f;
+            fpsYaw = 0.0f;
             break;
         case CAMARA_COCINA:
+            bCamaraFPS = false;  // Desactivar FPS para usar camara orbital
             iTipoCamara = 1;
             configurarCamara();
             break;
         case CAMARA_COMEDOR:
+            bCamaraFPS = false;  // Desactivar FPS para usar camara orbital
             iTipoCamara = 2;
             configurarCamara();
             break;
         case CAMARA_ALMACEN:
+            bCamaraFPS = false;  // Desactivar FPS para usar camara orbital
             iTipoCamara = 3;
             configurarCamara();
             break;
         case RESET_VISTA:
-            camAngleX = 20.0f;
-            camAngleY = 45.0f;
-            camDistance = 15.0f;
-            iTipoCamara = 0;
+            if (bCamaraFPS) {
+                // Reset FPS
+                fpsX = 0.0f;
+                fpsY = 2.0f;
+                fpsZ = 5.0f;
+                fpsPitch = 0.0f;
+                fpsYaw = 0.0f;
+            } else {
+                // Reset orbital
+                camAngleX = 20.0f;
+                camAngleY = 45.0f;
+                camDistance = 15.0f;
+                iTipoCamara = 0;
+            }
             break;
         case ANIMACION_ON:
             bAnimacionActiva = true;
@@ -108,6 +131,7 @@ void creacionMenu(void) {
     glutAddMenuEntry("Gris claro", FONDO1);
     glutAddMenuEntry("Blanco", FONDO2);
     glutAddMenuEntry("Beige", FONDO3);
+    glutAddMenuEntry("Celeste cielo", FONDO4);
     
     // Menu para estilo de visualizacion
     menuVisualizacion = glutCreateMenu(onMenu);

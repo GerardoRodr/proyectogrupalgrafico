@@ -43,6 +43,17 @@ ProyectoGrupal/
 
 ## 🎮 Controles
 
+### Cámara FPS (Primera Persona):
+- **`C` o `F`**: Activar/desactivar modo FPS
+- **WASD**: Mover (adelante/izquierda/atrás/derecha)
+- **Espacio**: Subir
+- **`Z`**: Bajar
+- **Clic izquierdo + arrastrar**: Rotar vista
+
+### Cámara Orbital (Modo Original):
+- **Clic izquierdo + arrastrar**: Rotar alrededor del centro
+- **Rueda del mouse**: Zoom in/out
+
 ### Teclado:
 - `ESC`: Salir del programa
 - `R`: Resetear vista de cámara
@@ -53,8 +64,6 @@ ProyectoGrupal/
 
 ### Mouse:
 - **Clic derecho**: Abrir menú contextual
-- **Clic izquierdo + arrastrar**: Rotar cámara
-- **Rueda del mouse**: Zoom in/out
 
 ## 🍳 Secciones del Proyecto
 
@@ -80,7 +89,9 @@ ProyectoGrupal/
 
 ## 🎨 Características
 
+- **Cámara FPS**: Modo primera persona con movimiento libre WASD
 - **Iluminación**: 3 tipos (día, noche, ambiente)
+- **Colores de fondo**: Gris claro, blanco, beige, celeste cielo
 - **Visualización**: Sólido y alambre
 - **Sonido**: Música de fondo activable
 - **Animación**: Rotación automática

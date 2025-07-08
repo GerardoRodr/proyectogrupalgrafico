@@ -10,7 +10,7 @@ extern float fTiempoAnimacion;
 
 // Enumeracion de opciones del menu
 typedef enum {
-    FONDO1, FONDO2, FONDO3,
+    FONDO1, FONDO2, FONDO3, FONDO4,
     VIS_SOLIDO, VIS_ALAMBRE,
     SONIDO_ON, SONIDO_OFF,
     LUZ_DIA, LUZ_NOCHE, LUZ_AMBIENTE,
