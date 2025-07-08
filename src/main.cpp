@@ -64,10 +64,16 @@ void display() {
     }
     
     if (iSeccionVisible == 2) { // Solo cuando se muestra todo
-        drawGrassExterior();
+        drawGrassExterior(2.25f, -0.7f, 1.5f, 32.5f, 11.0f); // Mismo nivel que acera, mismo ancho
         drawAcera();
         drawCarretera(); 
         drawLineasAmarillasCarretera();
+        
+        // Edificio izquierdo (al lado de la pared izquierda del restaurante) - Color verde claro
+        edificio(-6.56f, 0.0f, 5.5f, 1.0f, 0.0f, COLOR_VERDE); // Separado 1cm de la pared izquierda
+        
+        // Edificio derecho (al lado de la pared derecha del restaurante) - Color azul claro
+        edificio(11.06f, 0.0f, 5.5f, 1.0f, 0.0f, COLOR_AZUL); // Separado 1cm de la pared derecha
     }
     
     glutSwapBuffers();  

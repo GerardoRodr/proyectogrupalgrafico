@@ -35,16 +35,19 @@ void drawParedes() {
     glPopMatrix();
 }
 
-void drawGrassExterior() {
-    // Dibujar el pasto exterior
+void drawGrassExterior(float posX, float posY, float posZ, float ancho, float profundidad) {
+    // Dibujar pasto exterior reutilizable con parámetros personalizables
     glPushMatrix();
-    glTranslatef(0.0f, -1.0f, 0.0f);  // Posicionar en el suelo
+    glTranslatef(posX, posY, posZ);  // Posición personalizable
     glColor3f(0.1f, 0.8f, 0.1f);  // Color verde pasto
     glBegin(GL_QUADS);
-        glVertex3f(-10.0f, 0.0f, -10.0f);  // Vertice 1: Esquina TRASERA-IZQUIERDA
-        glVertex3f(10.0f, 0.0f, -10.0f);   // Vertice 2: Esquina TRASERA-DERECHA  
-        glVertex3f(10.0f, 0.0f, 10.0f);    // Vertice 3: Esquina FRONTAL-DERECHA
-        glVertex3f(-10.0f, 0.0f, 10.0f);   // Vertice 4: Esquina FRONTAL-IZQUIERDA
+        // Dimensiones personalizables
+        float mitadAncho = ancho / 2.0f;
+        float mitadProfundidad = profundidad / 2.0f;
+        glVertex3f(-mitadAncho, 0.0f, -mitadProfundidad);  // Esquina TRASERA-IZQUIERDA
+        glVertex3f(mitadAncho, 0.0f, -mitadProfundidad);   // Esquina TRASERA-DERECHA  
+        glVertex3f(mitadAncho, 0.0f, mitadProfundidad);    // Esquina FRONTAL-DERECHA
+        glVertex3f(-mitadAncho, 0.0f, mitadProfundidad);   // Esquina FRONTAL-IZQUIERDA
     glEnd();
     glPopMatrix();
 }
@@ -93,4 +96,162 @@ void drawLineasAmarillasCarretera(){
         
         glPopMatrix();
     }
+}
+
+void edificio(float posX, float posY, float posZ, float escala, float rotacionY, const GLfloat* colorParedes) {
+    glPushMatrix();
+    
+    // Aplicar transformaciones principales
+    glTranslatef(posX, posY, posZ);
+    glRotatef(rotacionY, 0.0f, 1.0f, 0.0f);
+    glScalef(escala, escala, escala);
+    
+    // Piso del edificio
+    glPushMatrix();
+    glTranslatef(0.0f, -0.7f, 0.0f);
+    drawCube(5.0f, 0.1f, 2.5f, COLOR_GRIS);
+    glPopMatrix();
+    
+    // Estructura principal del edificio - 3 pisos (usando el color parametrizado)
+    glPushMatrix();
+    glTranslatef(0.0f, 1.8f, 0.0f);
+    drawCube(5.0f, 5.6f, 2.5f, colorParedes);
+    glPopMatrix();
+    
+    // Techo del edificio
+    glPushMatrix();
+    glTranslatef(0.0f, 4.7f, 0.0f);
+    drawCube(5.2f, 0.3f, 2.7f, COLOR_MADERA_OSCURA);
+    glPopMatrix();
+    
+    // Cornisa decorativa entre pisos
+    glPushMatrix();
+    glTranslatef(0.0f, 1.8f, 0.0f);
+    drawCube(5.1f, 0.1f, 2.6f, COLOR_GRIS);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(0.0f, 3.3f, 0.0f);
+    drawCube(5.1f, 0.1f, 2.6f, COLOR_GRIS);
+    glPopMatrix();
+    
+    // Puerta principal centrada
+    glPushMatrix();
+    glTranslatef(0.0f, 0.5f, 1.25f);
+    drawCube(0.8f, 2.0f, 0.1f, COLOR_MADERA);
+    glPopMatrix();
+    
+    // Marco de la puerta
+    glPushMatrix();
+    glTranslatef(0.0f, 0.5f, 1.27f);
+    drawCube(1.0f, 2.2f, 0.05f, COLOR_MADERA_OSCURA);
+    glPopMatrix();
+    
+    // Escalon de la puerta
+    glPushMatrix();
+    glTranslatef(0.0f, -0.6f, 1.3f);
+    drawCube(1.2f, 0.1f, 0.3f, COLOR_GRIS);
+    glPopMatrix();
+    
+    // Ventanas primer piso - simetricas con marcos
+    glPushMatrix();
+    glTranslatef(-1.7f, 1.0f, 1.26f);
+    drawCube(0.6f, 0.6f, 0.08f, COLOR_AZUL);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(-1.7f, 1.0f, 1.28f);
+    drawCube(0.8f, 0.8f, 0.03f, COLOR_BLANCO);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(1.7f, 1.0f, 1.26f);
+    drawCube(0.6f, 0.6f, 0.08f, COLOR_AZUL);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(1.7f, 1.0f, 1.28f);
+    drawCube(0.8f, 0.8f, 0.03f, COLOR_BLANCO);
+    glPopMatrix();
+    
+    // Ventanas segundo piso - simetricas con marcos
+    glPushMatrix();
+    glTranslatef(-1.7f, 2.5f, 1.26f);
+    drawCube(0.6f, 0.6f, 0.08f, COLOR_AZUL);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(-1.7f, 2.5f, 1.28f);
+    drawCube(0.8f, 0.8f, 0.03f, COLOR_BLANCO);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(0.0f, 2.5f, 1.26f);
+    drawCube(0.6f, 0.6f, 0.08f, COLOR_AZUL);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(0.0f, 2.5f, 1.28f);
+    drawCube(0.8f, 0.8f, 0.03f, COLOR_BLANCO);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(1.7f, 2.5f, 1.26f);
+    drawCube(0.6f, 0.6f, 0.08f, COLOR_AZUL);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(1.7f, 2.5f, 1.28f);
+    drawCube(0.8f, 0.8f, 0.03f, COLOR_BLANCO);
+    glPopMatrix();
+    
+    // Ventanas tercer piso - simetricas con marcos
+    glPushMatrix();
+    glTranslatef(-1.7f, 4.0f, 1.26f);
+    drawCube(0.6f, 0.6f, 0.08f, COLOR_AZUL);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(-1.7f, 4.0f, 1.28f);
+    drawCube(0.8f, 0.8f, 0.03f, COLOR_BLANCO);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(0.0f, 4.0f, 1.26f);
+    drawCube(0.6f, 0.6f, 0.08f, COLOR_AZUL);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(0.0f, 4.0f, 1.28f);
+    drawCube(0.8f, 0.8f, 0.03f, COLOR_BLANCO);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(1.7f, 4.0f, 1.26f);
+    drawCube(0.6f, 0.6f, 0.08f, COLOR_AZUL);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(1.7f, 4.0f, 1.28f);
+    drawCube(0.8f, 0.8f, 0.03f, COLOR_BLANCO);
+    glPopMatrix();
+    
+    // Detalles decorativos en las esquinas
+    glPushMatrix();
+    glTranslatef(-2.4f, 2.8f, 0.0f);
+    drawCube(0.2f, 5.6f, 0.2f, COLOR_GRIS);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(2.4f, 2.8f, 0.0f);
+    drawCube(0.2f, 5.6f, 0.2f, COLOR_GRIS);
+    glPopMatrix();
+    
+    // Letrero del edificio
+    glPushMatrix();
+    glTranslatef(0.0f, 1.5f, 1.3f);
+    drawCube(2.0f, 0.3f, 0.05f, COLOR_NEGRO);
+    glPopMatrix();
+    
+    glPopMatrix(); // Cerrar transformaciones principales
 }
