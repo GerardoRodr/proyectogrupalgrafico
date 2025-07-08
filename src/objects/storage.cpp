@@ -251,8 +251,6 @@ void drawAlmacenComida() {
     glPopMatrix();
     
     // **CAJAS EN EL TECHO**
-    // Cajas apiladas cerca del congelador
-    drawCajaComida(6.2f + offsetX, -0.2f, -0.45f + offsetZ, 0.45f, 0.35f, 0.35f, COLOR_ROJO, COLOR_BLANCO);
     
     // Mas cajas dispersas (sobre la barra ya q estamos xdd)
     drawCajaComida(4.5f + offsetX, 0.4f, 1.7f + offsetZ, 0.4f, 0.3f, 0.3f, COLOR_AZUL, COLOR_BLANCO);
@@ -260,8 +258,8 @@ void drawAlmacenComida() {
     
     // **SACOS ADICIONALES EN EL SUELO**
     for(int i=0; i<2; i++) {
-        drawSaco(6.5f + offsetX + i, -0.5f, -2.3f + offsetZ, COLOR_BLANCO);      // Saco de arroz
-        drawSaco(6.8f + offsetX + i, -0.5f, -2.3f + offsetZ, COLOR_MARRON);     // Saco de frijoles
+        drawSaco(3.5f + offsetX + i, -0.5f, -2.3f + offsetZ, COLOR_BLANCO);      // Saco de arroz
+        drawSaco(3.8f + offsetX + i, -0.5f, -2.3f + offsetZ, COLOR_MARRON);     // Saco de frijoles
     }
     
     // **BOTELLAS EN LA BARRA**

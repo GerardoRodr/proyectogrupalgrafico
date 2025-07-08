@@ -49,20 +49,20 @@ void drawGabinetesSuperiores() {
 void drawEncimera() {  
     // Base de los gabinetes  
     glPushMatrix();  
-    glTranslatef(2.4f, -0.15f, 0.0f);  
-    drawCube(9.8f, 0.7f, 1.2f, COLOR_MADERA_OSCURA);  
+    glTranslatef(2.0f, -0.15f, 0.0f);  
+    drawCube(9.0f, 0.7f, 1.2f, COLOR_MADERA_OSCURA);  
     glPopMatrix();  
 
     // Encimera  
     glPushMatrix();  
-    glTranslatef(2.4f, 0.2f, 0.0f);  
-    drawCube(9.8f, 0.1f, 1.2f, COLOR_GRIS);  
+    glTranslatef(2.0f, 0.2f, 0.0f);  
+    drawCube(9.1f, 0.1f, 1.3f, COLOR_GRIS);  
     glPopMatrix();  
 
     // Cajones  
-    for(int i = 0; i < 8; i++) {  
+    for(int i = 0; i < 7; i++) {  
         glPushMatrix();  
-        glTranslatef(-1.8f + i * 1.2f, 0.0f, -0.6f);  
+        glTranslatef(-1.7f + i * 1.2f, -0.1f, -0.6f);  
         drawCube(1.0f, 0.3f, 0.05f, COLOR_MADERA);  
 
         // Manija del cajon  
@@ -424,25 +424,25 @@ void drawEscaleras() {
     // Lado izquierdo de las escaleras
     glPushMatrix();
     glTranslatef(6.9f, ALTURA_SEGUNDO_PISO * 0.5f, -3.0f + (NUM_ESCALONES * PROFUNDIDAD_ESCALON * 0.5f));
-    drawCube(0.05f, ALTURA_SEGUNDO_PISO, NUM_ESCALONES * PROFUNDIDAD_ESCALON, COLOR_METAL);
+    drawCube(0.05f, 4.5f, NUM_ESCALONES * PROFUNDIDAD_ESCALON, COLOR_METAL);
     glPopMatrix();
 }
 
 // Funcion principal para dibujar el segundo piso completo (BAR Y COMEDOR)
 void drawSecondFloorKitchen() {
-    // === ESTRUCTURA ARQUITECTONICA (SIN CAMBIOS) ===
+    // === ESTRUCTURA ARQUITECTONICA ===
     drawSegundoPisoParedes();   // Paredes blancas
     drawSegundoPisoPiso();      // Piso gris original
     drawEscaleras();            // Escaleras en posicion original
     
-    // === ZONA DEL BAR (30% del espacio) ===
+    // === ZONA DEL BAR ===
     drawSegundoPisoFregadero();         // Barra principal orientada a escaleras
     drawSegundoPisoGabinetesSuperiores(); // Estanteria para botellas
     drawSegundoPisoEncimera();          // Taburetes del bar (6 unidades)
     drawSegundoPisoRefrigerador();      // Maquina de cafe/expendedora
     
-    // === ZONA DE COMENSALES (70% del espacio) ===
-    drawVIPSquareTable();            // Mesa VIP para 4 (area privilegiada)
+    // === ZONA DE COMENSALES ===
+    drawVIPSquareTable();            // Mesa VIP p xddd
     drawMesasComensalesSecundoPiso();   // Distribucion principal de mesas
     
     // === AREA DE ESPERA ===
@@ -450,7 +450,7 @@ void drawSecondFloorKitchen() {
 }
 
 void drawMesasComensalesSecundoPiso() {
-    // ZONA PRINCIPAL DE COMENSALES (70% del espacio)
+    // ZONA PRINCIPAL DE COMENSALES
     // Distribucion estrategica con pasillos de servicio de 0.8m minimo
     
     // === ZONA ESTANDAR - MESAS PARA 4 PERSONAS ===
@@ -483,7 +483,7 @@ void drawMesasComensalesSecundoPiso() {
     }
     
     // === ZONA DE PAREJAS - MESAS PARA 2 PERSONAS ===
-    // Area lateral derecha (lejos del bar para intimidad)
+    // Area lateral derecha
     for(int i = 0; i < 3; i++) {
         glPushMatrix();
         glTranslatef(5.9f, -0.3f + ALTURA_SEGUNDO_PISO, 1.6f + i * 2.0f);
@@ -501,7 +501,7 @@ void drawMesasComensalesSecundoPiso() {
     glTranslatef(1.5f, -0.3f + ALTURA_SEGUNDO_PISO, 4.9f);
     drawMesaIndividual(0.0f, 0.0f, 0.0f, 3.0f, 1.4f, COLOR_MADERA);
     
-    // 8 sillas alrededor de mesa comunal (color azul para destacar)
+    // 8 sillas alrededor de mesa comunal (color azul p)
     // Lados largos
     drawSilla(-1.2f, -0.2f, -1.1f, COLOR_AZUL, COLOR_MADERA, 0.0f);
     drawSilla(0.0f, -0.2f, -1.1f, COLOR_AZUL, COLOR_MADERA, 0.0f);
