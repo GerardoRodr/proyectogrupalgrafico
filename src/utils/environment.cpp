@@ -18,20 +18,20 @@ void drawPiso() {
 void drawParedes() {  
     // Pared trasera de la cocina (extendida para cubrir tambien el almacen)
     glPushMatrix();  
-    glTranslatef(2.2f, 0.6f, -4.0f);  // Centrada para cubrir cocina + almacen
-    drawCube(12.5f, 2.6f, 0.1f, COLOR_BLANCO);  // Mas ancha
+    glTranslatef(2.2f, 0.95f, -4.0f);
+    drawCube(12.5f, 3.3f, 0.1f, COLOR_BLANCO);
     glPopMatrix();  
 
     // Pared lateral IZQUIERDA de la cocina (extendida para incluir el comedor)
     glPushMatrix();  
-    glTranslatef(-4.0f, 0.6f, 1.5f);  // Solo la pared izquierda
-    drawCube(0.1f, 2.6f, 11.0f, COLOR_BLANCO); // Extendida hacia adelante
+    glTranslatef(-4.0f, 0.95f, 1.5f);  // Solo la pared izquierda
+    drawCube(0.1f, 3.3f, 11.0f, COLOR_BLANCO); // Extendida hacia adelante
     glPopMatrix();  
     
     // Pared lateral derecha del almacen (ajustada al mismo tamaño que la izquierda)
     glPushMatrix();
-    glTranslatef(8.5f, 0.6f, 1.5f);  // Misma posicion Z que la pared izquierda
-    drawCube(0.1f, 2.6f, 11.0f, COLOR_BLANCO);  // Misma profundidad que la pared izquierda
+    glTranslatef(8.5f, 0.95f, 1.5f);  // Misma posicion Z que la pared izquierda
+    drawCube(0.1f, 3.3f, 11.0f, COLOR_BLANCO);  // Misma profundidad que la pared izquierda
     glPopMatrix();
 }
 
