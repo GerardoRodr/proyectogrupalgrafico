@@ -161,9 +161,6 @@ int main(int argc, char** argv) {
     // Configuracion inicial de iluminacion
     configurarIluminacion();
     
-    // Inicializar segundo piso
-    initSecondFloor();
-    
     creacionMenu();
 
     // Callbacks  

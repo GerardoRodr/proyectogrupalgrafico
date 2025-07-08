@@ -8,6 +8,7 @@ void drawCajaComida(float posX, float posY, float posZ, float width, float heigh
 void drawBotella(float posX, float posY, float posZ, float altura, const GLfloat* colorLiquido);
 void drawSaco(float posX, float posY, float posZ, const GLfloat* colorSaco);
 void drawEstanteria(float posX, float posY, float posZ);
+void drawEstanteriaCompleta(float posX, float posY, float posZ, int tipoEstanteria);
 void drawCongelador();
 
 // Funcion principal para dibujar todo el almacen

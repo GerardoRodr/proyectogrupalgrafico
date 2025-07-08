@@ -79,12 +79,12 @@ void drawRefrigerador() {
     // Cuerpo principal  
     glPushMatrix();  
     glTranslatef(-2.5f, 0.25f, -3.5f);  
-    drawCube(1.0f, 1.8f, 0.8f, COLOR_GRIS);  
+    drawCube(1.0f, 1.8f, 0.8f, COLOR_METAL);  
 
     // Manija  
     glPushMatrix();  
     glTranslatef(0.4f, 0.0f, 0.45f);  
-    drawCube(0.1f, 0.3f, 0.05f, COLOR_METAL);  
+    drawCube(0.1f, 0.3f, 0.05f, COLOR_GRIS);  
     glPopMatrix();  
 
     glPopMatrix();  
@@ -181,12 +181,12 @@ void drawSegundoPisoParedes() {
     drawCube(0.1f, 2.6f, 11.0f, COLOR_BLANCO);  
     glPopMatrix();
 }
-
+//Segundo piso piso xddddddd
 void drawSegundoPisoPiso() {
-    // Piso del segundo piso (identico al primer piso)
+    // Piso del segundo piso
     glPushMatrix();  
-    glTranslatef(2.25f, -0.7f + ALTURA_SEGUNDO_PISO, -1.5f);  
-    drawCube(12.5f, 0.1f, 5.0f, COLOR_GRIS);  
+    glTranslatef(1.45f, -0.7f + ALTURA_SEGUNDO_PISO, -1.5f);  
+    drawCube(10.9f, 0.1f, 5.0f, COLOR_GRIS);  
     glPopMatrix();  
     
     // Extension del piso hacia el area del comedor
@@ -200,7 +200,7 @@ void drawSegundoPisoFregadero() {
     // CONVERTIDO A: Barra principal del bar (30% del espacio)
     // Mostrador lineal orientado hacia escaleras
     glPushMatrix();  
-    glTranslatef(4.0f, -0.1f + ALTURA_SEGUNDO_PISO, -3.5f);  
+    glTranslatef(3.5f, -0.1f + ALTURA_SEGUNDO_PISO, -3.5f);  
 
     // Base del mostrador (estructura principal)
     glPushMatrix();  
@@ -254,13 +254,14 @@ void drawSegundoPisoEncimera() {
     // CONVERTIDO A: Taburetes del bar (6 taburetes)
     for(int i = 0; i < 6; i++) {  
         glPushMatrix();  
-        glTranslatef(1.0f + i * 1.0f, -0.1f + ALTURA_SEGUNDO_PISO, -2.5f);  
+        glTranslatef(1.5f + i * 1.0f, ALTURA_SEGUNDO_PISO -0.6f, -2.5f);  
         
         // Asiento del taburete
         glPushMatrix();  
-        glTranslatef(0.0f, 0.6f, 0.0f);  
+        glTranslatef(0.0f, 0.6f, 0.0f);
+        glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);  
         glColor3fv(COLOR_MARRON);  
-        glutSolidCylinder(0.2f, 0.05f, 16, 8);  
+        glutSolidCylinder(0.25f, 0.05f, 16, 8);  
         glPopMatrix();
 
         // Pata central del taburete
@@ -271,14 +272,15 @@ void drawSegundoPisoEncimera() {
 
         // Base del taburete
         glPushMatrix();  
-        glTranslatef(0.0f, 0.0f, 0.0f);  
+        glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);  
         glColor3fv(COLOR_METAL);  
         glutSolidCylinder(0.25f, 0.05f, 16, 8);  
         glPopMatrix();
 
         // Reposapies
         glPushMatrix();  
-        glTranslatef(0.0f, 0.25f, 0.0f);  
+        glTranslatef(0.0f, 0.25f, 0.0f);
+        glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);  
         glColor3fv(COLOR_METAL);  
         glutSolidTorus(0.02f, 0.15f, 8, 16);  
         glPopMatrix();
@@ -328,16 +330,16 @@ void drawSegundoPisoRefrigerador() {
 void drawVIPSquareTable() {  
     // CONVERTIDO A: Zona VIP - Mesa cuadrada para 4 personas (area privilegiada)
     glPushMatrix();  
-    glTranslatef(1.8f, -0.3f + ALTURA_SEGUNDO_PISO, 0.0f);  
+    glTranslatef(4.0f, -0.3f + ALTURA_SEGUNDO_PISO, 0.2f);  
     
     // Mesa VIP cuadrada grande
     drawMesaIndividual(0.0f, 0.0f, 0.0f, 1.6f, 1.6f, COLOR_MADERA);
 
     // 4 sillas VIP (color azul para diferenciacion)
-    drawSilla(-1.0f, 0.2f, 0.0f, COLOR_AZUL, COLOR_MADERA, 90.0f);   // Izquierda
-    drawSilla(1.0f, 0.2f, 0.0f, COLOR_AZUL, COLOR_MADERA, 270.0f);   // Derecha
-    drawSilla(0.0f, 0.2f, -1.0f, COLOR_AZUL, COLOR_MADERA, 0.0f);    // Frente
-    drawSilla(0.0f, 0.2f, 1.0f, COLOR_AZUL, COLOR_MADERA, 180.0f);   // Atras
+    drawSilla(-1.0f, -0.2f, 0.0f, COLOR_AZUL, COLOR_MADERA, 90.0f);   // Izquierda
+    drawSilla(1.0f, -0.2f, 0.0f, COLOR_AZUL, COLOR_MADERA, 270.0f);   // Derecha
+    drawSilla(0.0f, -0.2f, -1.0f, COLOR_AZUL, COLOR_MADERA, 0.0f);    // Frente
+    drawSilla(0.0f, -0.2f, 1.0f, COLOR_AZUL, COLOR_MADERA, 180.0f);   // Atras
 
     glPopMatrix();  
 }
@@ -402,13 +404,13 @@ void drawEscaleras() {
     const int NUM_ESCALONES = 16;  // 16 escalones para subir 3.2m (20cm cada escalon)
     const float ALTURA_ESCALON = ALTURA_SEGUNDO_PISO / NUM_ESCALONES;
     const float PROFUNDIDAD_ESCALON = 0.25f;
-    const float ANCHO_ESCALON = 1.2f;
+    const float ANCHO_ESCALON = 1.0f;
     
     for(int i = 0; i < NUM_ESCALONES; i++) {
         glPushMatrix();
         
         // Posicion de cada escalon
-        float posX = 7.5f;  // Al lado de la pared derecha
+        float posX = 7.4f;  // Al lado de la pared derecha
         float posY = -0.6f + (i * ALTURA_ESCALON);
         float posZ = -3.0f + (i * PROFUNDIDAD_ESCALON);
         
@@ -424,18 +426,12 @@ void drawEscaleras() {
     glTranslatef(6.9f, ALTURA_SEGUNDO_PISO * 0.5f, -3.0f + (NUM_ESCALONES * PROFUNDIDAD_ESCALON * 0.5f));
     drawCube(0.05f, ALTURA_SEGUNDO_PISO, NUM_ESCALONES * PROFUNDIDAD_ESCALON, COLOR_METAL);
     glPopMatrix();
-    
-    // Pasamanos
-    glPushMatrix();
-    glTranslatef(6.9f, ALTURA_SEGUNDO_PISO * 0.6f, -3.0f + (NUM_ESCALONES * PROFUNDIDAD_ESCALON * 0.5f));
-    drawCube(0.08f, 0.08f, NUM_ESCALONES * PROFUNDIDAD_ESCALON, COLOR_MADERA);
-    glPopMatrix();
 }
 
 // Funcion principal para dibujar el segundo piso completo (BAR Y COMEDOR)
 void drawSecondFloorKitchen() {
     // === ESTRUCTURA ARQUITECTONICA (SIN CAMBIOS) ===
-    drawSegundoPisoParedes();   // Paredes blancas originales
+    drawSegundoPisoParedes();   // Paredes blancas
     drawSegundoPisoPiso();      // Piso gris original
     drawEscaleras();            // Escaleras en posicion original
     
@@ -453,20 +449,6 @@ void drawSecondFloorKitchen() {
     drawSegundoPisoMesonCentral();      // Bancos largos cerca de escaleras
 }
 
-// Funcion de inicializacion del segundo piso (BAR Y COMEDOR)
-void initSecondFloor() {
-    // El segundo piso ahora funciona como area exclusiva para comensales con bar
-    // DISTRIBUCION DE CAPACIDAD:
-    // - Zona del bar: 6 taburetes
-    // - Mesa VIP: 4 comensales  
-    // - Mesas estandar (4 personas): 4 mesas = 16 comensales
-    // - Mesas para parejas (2 personas): 3 mesas = 6 comensales
-    // - Mesa comunal grande: 8 comensales
-    // - Area de espera: 2 bancos largos (capacidad variable)
-    // CAPACIDAD TOTAL: 40+ comensales
-    // RELACION 1:1 mantenida con capacidad del primer piso
-}
-
 void drawMesasComensalesSecundoPiso() {
     // ZONA PRINCIPAL DE COMENSALES (70% del espacio)
     // Distribucion estrategica con pasillos de servicio de 0.8m minimo
@@ -475,28 +457,28 @@ void drawMesasComensalesSecundoPiso() {
     // Fila 1 - Area central izquierda
     for(int i = 0; i < 2; i++) {
         glPushMatrix();
-        glTranslatef(-2.0f + i * 3.0f, -0.3f + ALTURA_SEGUNDO_PISO, 1.5f);
+        glTranslatef(-2.0f + i * 3.0f, -0.3f + ALTURA_SEGUNDO_PISO, -0.8f);
         drawMesaIndividual(0.0f, 0.0f, 0.0f, 1.4f, 1.4f, COLOR_MADERA);
         
         // 4 sillas por mesa (color rojo estandar)
-        drawSilla(-0.9f, 0.2f, 0.0f, COLOR_ROJO, COLOR_MADERA, 90.0f);
-        drawSilla(0.9f, 0.2f, 0.0f, COLOR_ROJO, COLOR_MADERA, 270.0f);
-        drawSilla(0.0f, 0.2f, -0.9f, COLOR_ROJO, COLOR_MADERA, 0.0f);
-        drawSilla(0.0f, 0.2f, 0.9f, COLOR_ROJO, COLOR_MADERA, 180.0f);
+        drawSilla(-0.9f, -0.2f, 0.0f, COLOR_ROJO, COLOR_MADERA, 90.0f);
+        drawSilla(0.9f, -0.2f, 0.0f, COLOR_ROJO, COLOR_MADERA, 270.0f);
+        drawSilla(0.0f, -0.2f, -0.9f, COLOR_ROJO, COLOR_MADERA, 0.0f);
+        drawSilla(0.0f, -0.2f, 0.9f, COLOR_ROJO, COLOR_MADERA, 180.0f);
         glPopMatrix();
     }
     
     // Fila 2 - Area posterior central
     for(int i = 0; i < 2; i++) {
         glPushMatrix();
-        glTranslatef(-1.0f + i * 3.0f, -0.3f + ALTURA_SEGUNDO_PISO, 4.0f);
+        glTranslatef(-1.0f + i * 3.0f, -0.3f + ALTURA_SEGUNDO_PISO, 1.8f);
         drawMesaIndividual(0.0f, 0.0f, 0.0f, 1.4f, 1.4f, COLOR_MADERA);
         
         // 4 sillas por mesa
-        drawSilla(-0.9f, 0.2f, 0.0f, COLOR_ROJO, COLOR_MADERA, 90.0f);
-        drawSilla(0.9f, 0.2f, 0.0f, COLOR_ROJO, COLOR_MADERA, 270.0f);
-        drawSilla(0.0f, 0.2f, -0.9f, COLOR_ROJO, COLOR_MADERA, 0.0f);
-        drawSilla(0.0f, 0.2f, 0.9f, COLOR_ROJO, COLOR_MADERA, 180.0f);
+        drawSilla(-0.9f, -0.2f, 0.0f, COLOR_ROJO, COLOR_MADERA, 90.0f);
+        drawSilla(0.9f, -0.2f, 0.0f, COLOR_ROJO, COLOR_MADERA, 270.0f);
+        drawSilla(0.0f, -0.2f, -0.9f, COLOR_ROJO, COLOR_MADERA, 0.0f);
+        drawSilla(0.0f, -0.2f, 0.9f, COLOR_ROJO, COLOR_MADERA, 180.0f);
         glPopMatrix();
     }
     
@@ -504,33 +486,33 @@ void drawMesasComensalesSecundoPiso() {
     // Area lateral derecha (lejos del bar para intimidad)
     for(int i = 0; i < 3; i++) {
         glPushMatrix();
-        glTranslatef(6.5f, -0.3f + ALTURA_SEGUNDO_PISO, 0.5f + i * 2.0f);
+        glTranslatef(5.9f, -0.3f + ALTURA_SEGUNDO_PISO, 1.6f + i * 2.0f);
         drawMesaIndividual(0.0f, 0.0f, 0.0f, 1.2f, 0.8f, COLOR_MADERA);
         
         // 2 sillas enfrentadas (color verde para diferenciacion)
-        drawSilla(0.0f, 0.2f, -0.7f, COLOR_VERDE, COLOR_MADERA, 0.0f);
-        drawSilla(0.0f, 0.2f, 0.7f, COLOR_VERDE, COLOR_MADERA, 180.0f);
+        drawSilla(0.0f, -0.2f, -0.7f, COLOR_VERDE, COLOR_MADERA, 0.0f);
+        drawSilla(0.0f, -0.2f, 0.7f, COLOR_VERDE, COLOR_MADERA, 180.0f);
         glPopMatrix();
     }
     
     // === MESA COMUNAL GRANDE - GRUPOS/EVENTOS ===
     // Area frontal amplia para grupos grandes
     glPushMatrix();
-    glTranslatef(-1.5f, -0.3f + ALTURA_SEGUNDO_PISO, 6.5f);
+    glTranslatef(1.5f, -0.3f + ALTURA_SEGUNDO_PISO, 4.9f);
     drawMesaIndividual(0.0f, 0.0f, 0.0f, 3.0f, 1.4f, COLOR_MADERA);
     
     // 8 sillas alrededor de mesa comunal (color azul para destacar)
     // Lados largos
-    drawSilla(-1.2f, 0.2f, -1.1f, COLOR_AZUL, COLOR_MADERA, 0.0f);
-    drawSilla(0.0f, 0.2f, -1.1f, COLOR_AZUL, COLOR_MADERA, 0.0f);
-    drawSilla(1.2f, 0.2f, -1.1f, COLOR_AZUL, COLOR_MADERA, 0.0f);
+    drawSilla(-1.2f, -0.2f, -1.1f, COLOR_AZUL, COLOR_MADERA, 0.0f);
+    drawSilla(0.0f, -0.2f, -1.1f, COLOR_AZUL, COLOR_MADERA, 0.0f);
+    drawSilla(1.2f, -0.2f, -1.1f, COLOR_AZUL, COLOR_MADERA, 0.0f);
     
-    drawSilla(-1.2f, 0.2f, 1.1f, COLOR_AZUL, COLOR_MADERA, 180.0f);
-    drawSilla(0.0f, 0.2f, 1.1f, COLOR_AZUL, COLOR_MADERA, 180.0f);
-    drawSilla(1.2f, 0.2f, 1.1f, COLOR_AZUL, COLOR_MADERA, 180.0f);
+    drawSilla(-1.2f, -0.2f, 1.1f, COLOR_AZUL, COLOR_MADERA, 180.0f);
+    drawSilla(0.0f, -0.2f, 1.1f, COLOR_AZUL, COLOR_MADERA, 180.0f);
+    drawSilla(1.2f, -0.2f, 1.1f, COLOR_AZUL, COLOR_MADERA, 180.0f);
     
     // Extremos
-    drawSilla(-1.8f, 0.2f, 0.0f, COLOR_AZUL, COLOR_MADERA, 90.0f);
-    drawSilla(1.8f, 0.2f, 0.0f, COLOR_AZUL, COLOR_MADERA, 270.0f);
+    drawSilla(-1.8f, -0.2f, 0.0f, COLOR_AZUL, COLOR_MADERA, 90.0f);
+    drawSilla(1.8f, -0.2f, 0.0f, COLOR_AZUL, COLOR_MADERA, 270.0f);
     glPopMatrix();
 }

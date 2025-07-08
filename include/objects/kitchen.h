@@ -29,7 +29,4 @@ void drawEscaleras();
 // Funcion principal para dibujar el segundo piso completo
 void drawSecondFloorKitchen();
 
-// Funcion de inicializacion del segundo piso
-void initSecondFloor();
-
 #endif
