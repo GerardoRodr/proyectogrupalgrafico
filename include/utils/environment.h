@@ -7,5 +7,8 @@
 void drawPiso();
 void drawParedes();
 void drawGrassExterior();
+void drawAcera();
+void drawCarretera();
+void drawLineasAmarillasCarretera();
 
 #endif

@@ -65,6 +65,9 @@ void display() {
     
     if (iSeccionVisible == 2) { // Solo cuando se muestra todo
         drawGrassExterior();
+        drawAcera();
+        drawCarretera(); 
+        drawLineasAmarillasCarretera();
     }
     
     glutSwapBuffers();  
