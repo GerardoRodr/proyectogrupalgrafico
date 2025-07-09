@@ -167,7 +167,7 @@ int main(int argc, char** argv) {
     glutInit(&argc, argv);  
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);  
     glutInitWindowSize(1024, 768);  // Ventana mas grande para ver mejor la escena expandida
-    glutCreateWindow("Cocina 3D Interactiva con Menu Expandido - Grupo 10");
+    glutCreateWindow("Cocina 3D Interactiva - Grupo 10");
     
     // Configuracion OpenGL  
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
